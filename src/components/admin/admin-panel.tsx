@@ -24,7 +24,7 @@ import { toast } from 'sonner'
 export function AdminPanel() {
   const adminSection = useStore((s) => s.adminSection)
   const setView = useStore((s) => s.setView)
-  const setAdminAuthed = useStore((s) => s.adminAuthed)
+  const setAdminAuthed = useStore((s) => s.setAdminAuthed)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [checking, setChecking] = useState(true)
 
