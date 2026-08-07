@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
+import { adminFetch } from '@/lib/admin-fetch'
 
 type MediaItem = {
   url: string
@@ -43,7 +44,7 @@ export function MediaUploader({
       for (const file of Array.from(files)) {
         const formData = new FormData()
         formData.append('file', file)
-        const res = await fetch('/api/upload', { method: 'POST', body: formData })
+        const res = await adminFetch('/api/upload', { method: 'POST', body: formData })
         if (!res.ok) {
           const err = await res.json().catch(() => ({}))
           throw new Error(err.error || 'Error al subir archivo')

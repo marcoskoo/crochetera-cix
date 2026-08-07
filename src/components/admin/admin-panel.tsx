@@ -25,30 +25,19 @@ export function AdminPanel() {
   const adminSection = useStore((s) => s.adminSection)
   const setView = useStore((s) => s.setView)
   const setAdminAuthed = useStore((s) => s.setAdminAuthed)
+  const adminAuthed = useStore((s) => s.adminAuthed)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [checking, setChecking] = useState(true)
 
-  // Verificar auth al montar
+  // Si por algún motivo adminAuthed es false al montar (p.ej. tras reload
+  // sin cookie válida), redirigir al store. NO hacemos auto-check de la
+  // cookie cada vez que se monta el panel porque puede causar race conditions
+  // con el flujo de login (la cookie acaba de setearse y un fetch inmediato
+  // puede no enviarla todavía).
   useEffect(() => {
-    fetch('/api/auth/check')
-      .then((r) => r.json())
-      .then((data) => {
-        if (!data.authed) {
-          setAdminAuthed(false)
-          setView('store')
-          toast.error('Sesión expirada. Inicia sesión nuevamente.')
-        }
-      })
-      .finally(() => setChecking(false))
-  }, [setAdminAuthed, setView])
-
-  if (checking) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse text-muted-foreground">Verificando sesión...</div>
-      </div>
-    )
-  }
+    if (!adminAuthed) {
+      setView('store')
+    }
+  }, [adminAuthed, setView])
 
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' })

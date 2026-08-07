@@ -143,6 +143,9 @@ export const useStore = create<AppState>()(
       partialize: (state) => ({
         cart: state.cart,
         adminAuthed: state.adminAuthed,
+        view: state.view,
+        adminSection: state.adminSection,
+        storeSection: state.storeSection,
         selectedCategory: state.selectedCategory,
       }),
     },

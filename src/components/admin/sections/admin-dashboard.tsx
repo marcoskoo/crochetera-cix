@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { useStore } from '@/lib/store'
 import { formatPrice } from '@/lib/site'
+import { adminFetch } from '@/lib/admin-fetch'
 import Link from 'next/link'
 
 interface DashboardStats {
@@ -40,10 +41,10 @@ export function AdminDashboard() {
     async function load() {
       try {
         const [prodRes, catRes, ordRes, tRes] = await Promise.all([
-          fetch('/api/products'),
-          fetch('/api/categories'),
-          fetch('/api/orders'),
-          fetch('/api/testimonials'),
+          adminFetch('/api/products'),
+          adminFetch('/api/categories'),
+          adminFetch('/api/orders'),
+          adminFetch('/api/testimonials'),
         ])
         const products = prodRes.ok ? await prodRes.json() : []
         const categories = catRes.ok ? await catRes.json() : []

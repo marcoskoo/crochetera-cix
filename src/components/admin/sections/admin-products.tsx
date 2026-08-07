@@ -39,6 +39,7 @@ import { toast } from 'sonner'
 import { formatPrice } from '@/lib/site'
 import type { ProductWithRelations, Category } from '@/lib/types'
 import { useStore } from '@/lib/store'
+import { adminFetch } from '@/lib/admin-fetch'
 
 type ProductForm = {
   name: string
@@ -97,13 +98,15 @@ export function AdminProducts() {
     setLoading(true)
     try {
       const [pRes, cRes] = await Promise.all([
-        fetch('/api/products'),
-        fetch('/api/categories'),
+        adminFetch('/api/products'),
+        adminFetch('/api/categories'),
       ])
       const prods = pRes.ok ? await pRes.json() : []
       const cats = cRes.ok ? await cRes.json() : []
       setProducts(prods)
       setCategories(cats)
+    } catch {
+      // 401 ya manejado por adminFetch
     } finally {
       setLoading(false)
     }
@@ -153,7 +156,7 @@ export function AdminProducts() {
       const body = { ...form, price: parseFloat(form.price), oldPrice: form.oldPrice || null, stock: parseInt(form.stock) || 0, productionDays: form.productionDays ? parseInt(form.productionDays) : null }
       const url = editing ? `/api/products/${editing.id}` : '/api/products'
       const method = editing ? 'PUT' : 'POST'
-      const res = await fetch(url, {
+      const res = await adminFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -172,7 +175,7 @@ export function AdminProducts() {
   const handleDelete = async () => {
     if (!deleteTarget) return
     try {
-      const res = await fetch(`/api/products/${deleteTarget.id}`, { method: 'DELETE' })
+      const res = await adminFetch(`/api/products/${deleteTarget.id}`, { method: 'DELETE' })
       if (!res.ok) throw new Error('Error al eliminar')
       toast.success('Producto eliminado')
       setDeleteTarget(null)

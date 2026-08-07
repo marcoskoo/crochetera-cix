@@ -26,6 +26,7 @@ import {
 import { MediaUploader } from '../media-uploader'
 import { Plus, Pencil, Trash2, Image as ImageIcon } from 'lucide-react'
 import { toast } from 'sonner'
+import { adminFetch } from '@/lib/admin-fetch'
 import type { GalleryImage } from '@/lib/types'
 
 interface GalleryForm {
@@ -58,7 +59,7 @@ export function AdminGallery() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch('/api/gallery')
+      const res = await adminFetch('/api/gallery')
       const data = await res.json()
       setImages(data)
     } finally {
@@ -98,7 +99,7 @@ export function AdminGallery() {
     try {
       const url = editing ? `/api/gallery/${editing.id}` : '/api/gallery'
       const method = editing ? 'PUT' : 'POST'
-      const res = await fetch(url, {
+      const res = await adminFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -117,7 +118,7 @@ export function AdminGallery() {
   const handleDelete = async () => {
     if (!deleteTarget) return
     try {
-      await fetch(`/api/gallery/${deleteTarget.id}`, { method: 'DELETE' })
+      await adminFetch(`/api/gallery/${deleteTarget.id}`, { method: 'DELETE' })
       toast.success('Imagen eliminada')
       setDeleteTarget(null)
       load()

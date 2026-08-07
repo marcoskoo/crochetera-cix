@@ -27,6 +27,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Plus, Pencil, Trash2, MessageSquareQuote } from 'lucide-react'
 import { toast } from 'sonner'
+import { adminFetch } from '@/lib/admin-fetch'
 import type { Testimonial } from '@/lib/types'
 
 interface TestForm {
@@ -61,7 +62,7 @@ export function AdminTestimonials() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch('/api/testimonials')
+      const res = await adminFetch('/api/testimonials')
       const data = await res.json()
       setItems(data)
     } finally {
@@ -102,7 +103,7 @@ export function AdminTestimonials() {
     try {
       const url = editing ? `/api/testimonials/${editing.id}` : '/api/testimonials'
       const method = editing ? 'PUT' : 'POST'
-      const res = await fetch(url, {
+      const res = await adminFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -121,7 +122,7 @@ export function AdminTestimonials() {
   const handleDelete = async () => {
     if (!deleteTarget) return
     try {
-      await fetch(`/api/testimonials/${deleteTarget.id}`, { method: 'DELETE' })
+      await adminFetch(`/api/testimonials/${deleteTarget.id}`, { method: 'DELETE' })
       toast.success('Testimonio eliminado')
       setDeleteTarget(null)
       load()

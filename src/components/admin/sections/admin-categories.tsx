@@ -27,6 +27,7 @@ import {
 import { Plus, Pencil, Trash2, FolderTree } from 'lucide-react'
 import { toast } from 'sonner'
 import type { Category } from '@/lib/types'
+import { adminFetch } from '@/lib/admin-fetch'
 
 interface CatForm {
   name: string
@@ -52,7 +53,7 @@ export function AdminCategories() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch('/api/categories')
+      const res = await adminFetch('/api/categories')
       const data = await res.json()
       setCategories(data)
     } finally {
@@ -90,7 +91,7 @@ export function AdminCategories() {
     try {
       const url = editing ? `/api/categories/${editing.id}` : '/api/categories'
       const method = editing ? 'PUT' : 'POST'
-      const res = await fetch(url, {
+      const res = await adminFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -109,7 +110,7 @@ export function AdminCategories() {
   const handleDelete = async () => {
     if (!deleteTarget) return
     try {
-      const res = await fetch(`/api/categories/${deleteTarget.id}`, { method: 'DELETE' })
+      const res = await adminFetch(`/api/categories/${deleteTarget.id}`, { method: 'DELETE' })
       if (!res.ok) throw new Error('Error al eliminar')
       toast.success('Categoría eliminada')
       setDeleteTarget(null)

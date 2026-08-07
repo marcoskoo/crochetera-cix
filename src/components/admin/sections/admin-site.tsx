@@ -10,6 +10,7 @@ import { MediaUploader } from '../media-uploader'
 import { Save, Loader2, Palette, Store, Phone, Image as ImageIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import type { SiteConfig } from '@/lib/types'
+import { adminFetch } from '@/lib/admin-fetch'
 
 export function AdminSite() {
   const [config, setConfig] = useState<SiteConfig | null>(null)
@@ -27,7 +28,7 @@ export function AdminSite() {
     if (!config) return
     setSaving(true)
     try {
-      const res = await fetch('/api/site', {
+      const res = await adminFetch('/api/site', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(config),

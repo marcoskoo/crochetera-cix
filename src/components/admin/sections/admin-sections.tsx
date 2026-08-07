@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Plus, Pencil, Trash2, Eye, EyeOff, LayoutList } from 'lucide-react'
 import { toast } from 'sonner'
+import { adminFetch } from '@/lib/admin-fetch'
 import type { Section } from '@/lib/types'
 
 export function AdminSections() {
@@ -47,7 +48,7 @@ export function AdminSections() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch('/api/sections')
+      const res = await adminFetch('/api/sections')
       const data = await res.json()
       setSections(data)
     } finally {
@@ -87,7 +88,7 @@ export function AdminSections() {
     try {
       const url = editing ? `/api/sections/${editing.id}` : '/api/sections'
       const method = editing ? 'PUT' : 'POST'
-      const res = await fetch(url, {
+      const res = await adminFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -106,7 +107,7 @@ export function AdminSections() {
   const handleDelete = async () => {
     if (!deleteTarget) return
     try {
-      await fetch(`/api/sections/${deleteTarget.id}`, { method: 'DELETE' })
+      await adminFetch(`/api/sections/${deleteTarget.id}`, { method: 'DELETE' })
       toast.success('Sección eliminada')
       setDeleteTarget(null)
       load()
@@ -117,7 +118,7 @@ export function AdminSections() {
 
   const toggleVisible = async (s: Section) => {
     try {
-      await fetch(`/api/sections/${s.id}`, {
+      await adminFetch(`/api/sections/${s.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...s, visible: !s.visible }),

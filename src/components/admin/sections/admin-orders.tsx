@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/dialog'
 import { ShoppingBag, Phone, Mail, MapPin, Trash2, Eye } from 'lucide-react'
 import { toast } from 'sonner'
+import { adminFetch } from '@/lib/admin-fetch'
 import { formatPrice } from '@/lib/site'
 import { useStore } from '@/lib/store'
 import type { Order } from '@prisma/client'
@@ -64,7 +65,7 @@ export function AdminOrders() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch('/api/orders')
+      const res = await adminFetch('/api/orders')
       const data = await res.json()
       setOrders(data)
     } finally {
@@ -78,7 +79,7 @@ export function AdminOrders() {
 
   const updateStatus = async (id: string, status: string) => {
     try {
-      const res = await fetch(`/api/orders/${id}`, {
+      const res = await adminFetch(`/api/orders/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
@@ -94,7 +95,7 @@ export function AdminOrders() {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`/api/orders/${id}`, { method: 'DELETE' })
+      const res = await adminFetch(`/api/orders/${id}`, { method: 'DELETE' })
       if (!res.ok) throw new Error('Error al eliminar')
       toast.success('Pedido eliminado')
       setSelected(null)
