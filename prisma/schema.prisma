@@ -1,0 +1,189 @@
+// CROCHETERA.CIX - Schema de base de datos
+// Peluches tejidos a crochet - Tienda online con panel admin
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Configuración global del sitio (single row)
+model SiteConfig {
+  id              String   @id @default("singleton")
+  storeName       String   @default("CROCHETERA.CIX")
+  tagline         String   @default("Peluches tejidos a mano con amor")
+  logoUrl         String?
+  heroTitle       String   @default("Peluches tejidos a mano")
+  heroSubtitle    String   @default("Cada pieza es única, hecha con paciencia y mucho amor")
+  heroButtonText  String   @default("Ver catálogo")
+  heroImage       String?
+  aboutTitle      String   @default("Sobre CROCHETERA.CIX")
+  aboutText       String   @default("Somos un taller artesanal dedicado a crear peluches tejidos a crochet de la más alta calidad. Cada pieza es elaborada a mano con materiales premium y mucho cariño.")
+  aboutImage      String?
+  phone           String?
+  email           String?
+  whatsapp        String?
+  instagram       String?
+  facebook        String?
+  tiktok          String?
+  address         String?
+  primaryColor    String   @default("#E91E63")
+  secondaryColor  String   @default("#8D6E63")
+  accentColor     String   @default("#F8BBD0")
+  shippingInfo    String   @default("Envíos a todo el país. Producto hecho a pedido, demora 5-7 días hábiles.")
+  paymentInfo     String   @default("Aceptamos transferencia bancaria, Yape, Plin y MercadoPago.")
+  currency        String   @default("S/")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Categorías de productos (ej: Ositos, Conejitos, Personajes, Personalizados)
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  icon        String?
+  order       Int       @default(0)
+  visible     Boolean   @default(true)
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// Productos (peluches)
+model Product {
+  id          String         @id @default(cuid())
+  name        String
+  slug        String         @unique
+  description String
+  price       Float
+  oldPrice    Float?
+  categoryId  String?
+  category    Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  stock       Int            @default(0)
+  unlimited   Boolean        @default(false)
+  featured    Boolean        @default(false)
+  status      String         @default("active") // active | draft | archived
+  size        String?        // pequeño, mediano, grande
+  material    String?        // tipo de hilo, relleno
+  height      String?        // medidas en cm
+  weight      String?
+  productionDays Int?        // días de elaboración
+  tags        String?        // tags separados por coma
+  images      ProductImage[]
+  videos      ProductVideo[]
+  reviews     Review[]
+  orderItems  OrderItem[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+// Imágenes de producto (múltiples)
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String?
+  order     Int     @default(0)
+  isMain    Boolean @default(false)
+}
+
+// Videos de producto (link YouTube/Vimeo o archivo)
+model ProductVideo {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  type      String  @default("youtube") // youtube | vimeo | mp4 | file
+  title     String?
+  order     Int     @default(0)
+}
+
+// Reseñas de productos
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  author    String
+  rating    Int      @default(5)
+  comment   String
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// Secciones configurables de la home (galería, testimonios, banner, FAQ, etc.)
+model Section {
+  id       String  @id @default(cuid())
+  key      String  @unique // hero | gallery | testimonials | faq | contact | custom
+  title    String
+  subtitle String?
+  content  String? // markdown o texto
+  visible  Boolean @default(true)
+  order    Int     @default(0)
+  config   String? // JSON con configuración extra
+}
+
+// Imágenes de galería general
+model GalleryImage {
+  id        String  @id @default(cuid())
+  url       String
+  title     String?
+  caption   String?
+  category  String?
+  order     Int     @default(0)
+  visible   Boolean @default(true)
+}
+
+// Testimonios de clientes
+model Testimonial {
+  id        String  @id @default(cuid())
+  name      String
+  message   String
+  rating    Int     @default(5)
+  avatarUrl String?
+  location  String?
+  visible   Boolean @default(true)
+  order     Int     @default(0)
+  createdAt DateTime @default(now())
+}
+
+// Pedidos
+model Order {
+  id           String      @id @default(cuid())
+  customerName String
+  customerEmail String?
+  customerPhone String
+  customerAddress String?
+  notes        String?
+  total        Float
+  status       String      @default("pending") // pending | confirmed | production | shipped | delivered | cancelled
+  items        OrderItem[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  name      String
+  price     Float
+  quantity  Int
+  imageUrl  String?
+}
+
+// Sesiones de admin (cookie-based)
+model AdminSession {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  username  String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
