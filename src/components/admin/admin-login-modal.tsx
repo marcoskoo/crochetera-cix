@@ -49,6 +49,24 @@ export function AdminLoginModal() {
         const err = await res.json().catch(() => ({}))
         throw new Error(err.error || 'Error al iniciar sesión')
       }
+      // Verificar que la cookie quedó bien seteada antes de cambiar de vista.
+      // Esto evita que el Dashboard dispare un 401 prematuro que cerraría
+      // la sesión recién creada.
+      let verified = false
+      for (let i = 0; i < 5; i++) {
+        const checkRes = await fetch('/api/auth/check', { credentials: 'same-origin' })
+        if (checkRes.ok) {
+          const data = await checkRes.json()
+          if (data.authed) {
+            verified = true
+            break
+          }
+        }
+        await new Promise((r) => setTimeout(r, 100))
+      }
+      if (!verified) {
+        throw new Error('No se pudo verificar la sesión. Intenta nuevamente.')
+      }
       setAdminAuthed(true)
       setLoginOpen(false)
       toast.success('¡Bienvenida al panel admin!')
