@@ -9,3 +9,8 @@ export type AdminSection =
   | 'sections'
   | 'gallery'
   | 'testimonials'
+  | 'reviews'
+  | 'faq'
+  | 'newsletter'
+  | 'customRequests'
+  | 'stockNotifications'

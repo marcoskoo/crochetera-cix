@@ -78,6 +78,7 @@ model Product {
   videos      ProductVideo[]
   reviews     Review[]
   orderItems  OrderItem[]
+  stockNotifications StockNotification[]
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 }
@@ -186,4 +187,52 @@ model AdminSession {
   username  String
   expiresAt DateTime
   createdAt DateTime @default(now())
+}
+
+// Newsletter - suscriptores por email
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+// FAQ - preguntas frecuentes
+model FAQ {
+  id        String  @id @default(cuid())
+  question  String
+  answer    String
+  category  String  @default("General")
+  order     Int     @default(0)
+  visible   Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Notificaciones de stock (avísame cuando haya)
+model StockNotification {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  email     String
+  phone     String?
+  notified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// Pedidos personalizados (formulario custom)
+model CustomRequest {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  phone       String
+  description String
+  budget      String?
+  deadline    String?
+  referenceImageUrl String?
+  status      String   @default("pending") // pending | in_review | quoted | accepted | rejected | completed
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

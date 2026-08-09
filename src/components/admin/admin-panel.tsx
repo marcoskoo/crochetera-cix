@@ -11,6 +11,11 @@ import { AdminSite } from './sections/admin-site'
 import { AdminSections } from './sections/admin-sections'
 import { AdminGallery } from './sections/admin-gallery'
 import { AdminTestimonials } from './sections/admin-testimonials'
+import { AdminReviews } from './sections/admin-reviews'
+import { AdminFAQ } from './sections/admin-faq'
+import { AdminNewsletter } from './sections/admin-newsletter'
+import { AdminCustomRequests } from './sections/admin-custom-requests'
+import { AdminStockNotifications } from './sections/admin-stock-notifications'
 import { Button } from '@/components/ui/button'
 import { Menu, Store, LogOut } from 'lucide-react'
 import {
@@ -122,10 +127,15 @@ export function AdminPanel() {
                 {adminSection === 'products' && 'Productos'}
                 {adminSection === 'categories' && 'Categorías'}
                 {adminSection === 'orders' && 'Pedidos'}
-                {adminSection === 'site' && 'Configuración del sitio'}
-                {adminSection === 'sections' && 'Secciones'}
+                {adminSection === 'reviews' && 'Reseñas'}
+                {adminSection === 'customRequests' && 'Pedidos personalizados'}
                 {adminSection === 'gallery' && 'Galería'}
                 {adminSection === 'testimonials' && 'Testimonios'}
+                {adminSection === 'faq' && 'Preguntas frecuentes'}
+                {adminSection === 'newsletter' && 'Newsletter'}
+                {adminSection === 'stockNotifications' && 'Alertas de stock'}
+                {adminSection === 'sections' && 'Secciones'}
+                {adminSection === 'site' && 'Configuración del sitio'}
               </h1>
               <p className="text-sm text-muted-foreground">
                 Panel de administración · CROCHETERA.CIX
@@ -139,10 +149,15 @@ export function AdminPanel() {
           {adminSection === 'products' && <AdminProducts />}
           {adminSection === 'categories' && <AdminCategories />}
           {adminSection === 'orders' && <AdminOrders />}
-          {adminSection === 'site' && <AdminSite />}
-          {adminSection === 'sections' && <AdminSections />}
+          {adminSection === 'reviews' && <AdminReviews />}
+          {adminSection === 'customRequests' && <AdminCustomRequests />}
           {adminSection === 'gallery' && <AdminGallery />}
           {adminSection === 'testimonials' && <AdminTestimonials />}
+          {adminSection === 'faq' && <AdminFAQ />}
+          {adminSection === 'newsletter' && <AdminNewsletter />}
+          {adminSection === 'stockNotifications' && <AdminStockNotifications />}
+          {adminSection === 'sections' && <AdminSections />}
+          {adminSection === 'site' && <AdminSite />}
         </div>
       </main>
     </div>

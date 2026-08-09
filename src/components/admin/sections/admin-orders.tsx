@@ -19,7 +19,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog'
-import { ShoppingBag, Phone, Mail, MapPin, Trash2, Eye } from 'lucide-react'
+import { ShoppingBag, Phone, Mail, MapPin, Trash2, Eye, Download } from 'lucide-react'
 import { toast } from 'sonner'
 import { adminFetch } from '@/lib/admin-fetch'
 import { formatPrice } from '@/lib/site'
@@ -128,6 +128,15 @@ export function AdminOrders() {
         <span className="text-sm text-muted-foreground">
           {filtered.length} pedido(s)
         </span>
+        <Button variant="outline" size="sm" className="ml-auto" asChild>
+          <a
+            href={`/api/orders/export${filterStatus !== 'all' ? `?status=${filterStatus}` : ''}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Download className="h-4 w-4 mr-1" /> Exportar CSV
+          </a>
+        </Button>
       </div>
 
       {loading ? (

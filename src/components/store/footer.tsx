@@ -98,6 +98,30 @@ export function Footer() {
                   Contacto
                 </button>
               </li>
+              <li>
+                <button
+                  onClick={() => goToSection('custom')}
+                  className="text-background/70 hover:text-primary transition-colors"
+                >
+                  Pedidos personalizados
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => goToSection('track')}
+                  className="text-background/70 hover:text-primary transition-colors"
+                >
+                  Rastrear pedido
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => goToSection('wishlist')}
+                  className="text-background/70 hover:text-primary transition-colors"
+                >
+                  Lista de deseos
+                </button>
+              </li>
             </ul>
           </div>
 

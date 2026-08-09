@@ -94,6 +94,21 @@ async function main() {
   ]
   for (const t of testimonials) await db.testimonial.create({ data: t })
 
+  // FAQ
+  const faqs = [
+    { question: '¿Cuánto demora la elaboración de un peluche?', answer: 'Cada peluche es tejido a mano por encargo. El tiempo de elaboración varía entre 3 y 10 días hábiles según el tamaño y la complejidad del diseño. El tiempo exacto se indica en cada producto.', category: 'Productos', order: 1 },
+    { question: '¿Hacen envíos a todo el país?', answer: 'Sí, enviamos a todo el Perú por Olva Courier, Shalom Bus o agencia de transportes según tu preferencia. El costo de envío se calcula según el destino y se paga al recibir el paquete.', category: 'Envíos', order: 2 },
+    { question: '¿Qué métodos de pago aceptan?', answer: 'Aceptamos transferencia bancaria (BCP, Interbank), Yape, Plin y MercadoPago. Para pedidos personalizados se requiere un adelanto del 50% para iniciar la elaboración.', category: 'Pagos', order: 3 },
+    { question: '¿Puedo personalizar el peluche?', answer: '¡Por supuesto! Puedes elegir colores, tamaño, accesorios, bordado de nombres y más. Visita nuestra sección "Personalizados" o contáctanos por WhatsApp con tu idea.', category: 'Productos', order: 4 },
+    { question: '¿Los peluches son aptos para niños?', answer: 'Sí, usamos materiales antialérgicos y seguros. Sin embargo, recomendamos supervisión para niños menores de 3 años porque algunos detalles pequeños pueden desprenderse.', category: 'Productos', order: 5 },
+    { question: '¿Cómo cuido mi peluche tejido?', answer: 'Lavar a mano con agua fría y jabón suave. No retorcer. Secar al aire libre en horizontal. No usar lavadora ni secadora. Cepillar suavemente para mantener la textura.', category: 'Cuidados', order: 6 },
+    { question: '¿Puedo cancelar o cambiar mi pedido?', answer: 'Las cancelaciones se aceptan hasta 24 horas después de hacer el pedido. Como son productos hechos a mano, no aceptamos devoluciones por cambio de opinión, pero sí por defectos de fabricación.', category: 'Pedidos', order: 7 },
+  ]
+  for (const f of faqs) {
+    const existing = await db.fAQ.findFirst({ where: { question: f.question } })
+    if (!existing) await db.fAQ.create({ data: f })
+  }
+
   console.log('✅ Datos iniciales cargados correctamente')
 }
 

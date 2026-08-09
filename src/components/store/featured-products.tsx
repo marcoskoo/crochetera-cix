@@ -5,8 +5,13 @@ import { useStore } from '@/lib/store'
 import { ProductCard } from './product-card'
 import { Button } from '@/components/ui/button'
 import { Sparkles, ArrowRight } from 'lucide-react'
+import type { ProductWithRelations } from '@/lib/types'
 
-export function FeaturedProducts() {
+interface FeaturedProductsProps {
+  onQuickView?: (product: ProductWithRelations) => void
+}
+
+export function FeaturedProducts({ onQuickView }: FeaturedProductsProps) {
   const products = useStore((s) => s.products)
   const goToSection = useStore((s) => s.goToSection)
   const featured = products.filter((p) => p.featured).slice(0, 8)
@@ -37,7 +42,7 @@ export function FeaturedProducts() {
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {featured.map((p, i) => (
-            <ProductCard key={p.id} product={p} index={i} />
+            <ProductCard key={p.id} product={p} index={i} onQuickView={onQuickView} />
           ))}
         </div>
 

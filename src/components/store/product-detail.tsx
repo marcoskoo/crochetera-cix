@@ -5,6 +5,8 @@ import { motion } from 'framer-motion'
 import { useStore } from '@/lib/store'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
   ArrowLeft,
@@ -19,10 +21,17 @@ import {
   Minus,
   Plus,
   Play,
+  Share2,
+  MessageCircle,
+  Facebook,
+  Twitter,
+  Bell,
+  ZoomIn,
 } from 'lucide-react'
 import { formatPrice, getEmbedUrl, detectVideoType } from '@/lib/site'
 import { toast } from 'sonner'
 import type { ProductWithRelations } from '@/lib/types'
+import { ReviewsSection } from './reviews-section'
 
 export function ProductDetail() {
   const selectedProductId = useStore((s) => s.selectedProductId)
@@ -31,6 +40,8 @@ export function ProductDetail() {
   const setCartOpen = useStore((s) => s.setCartOpen)
   const products = useStore((s) => s.products)
   const siteConfig = useStore((s) => s.siteConfig)
+  const toggleWishlist = useStore((s) => s.toggleWishlist)
+  const isInWishlist = useStore((s) => s.isInWishlist)
   const currency = siteConfig?.currency || 'S/'
 
   const [product, setProduct] = useState<ProductWithRelations | null>(null)
@@ -38,6 +49,10 @@ export function ProductDetail() {
   const [activeImageIdx, setActiveImageIdx] = useState(0)
   const [quantity, setQuantity] = useState(1)
   const [showVideo, setShowVideo] = useState(false)
+  const [zoomed, setZoomed] = useState(false)
+  const [showStockNotify, setShowStockNotify] = useState(false)
+  const [stockNotifyEmail, setStockNotifyEmail] = useState('')
+  const [stockNotifySubmitting, setStockNotifySubmitting] = useState(false)
 
   useEffect(() => {
     if (!selectedProductId) {
@@ -45,13 +60,13 @@ export function ProductDetail() {
     }
     let cancelled = false
     // Reset states when product changes
-    /* eslint-disable react-hooks/set-state-in-effect */
+     
     setLoading(true)
     setProduct(null)
     setActiveImageIdx(0)
     setQuantity(1)
     setShowVideo(false)
-    /* eslint-enable react-hooks/set-state-in-effect */
+     
 
     // Intentar del cache primero
     const cached = products.find((p) => p.id === selectedProductId)
@@ -145,10 +160,16 @@ export function ProductDetail() {
           animate={{ opacity: 1, x: 0 }}
           className="space-y-4"
         >
-          <div className="relative aspect-square rounded-2xl overflow-hidden bg-muted shadow-lg">
+          <div
+            className="relative aspect-square rounded-2xl overflow-hidden bg-muted shadow-lg cursor-zoom-in group"
+            onClick={() => mainImage && setZoomed(true)}
+          >
             {product.videos.length > 0 && !showVideo && (
               <button
-                onClick={() => setShowVideo(true)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setShowVideo(true)
+                }}
                 className="absolute inset-0 z-10 flex items-center justify-center bg-black/30 hover:bg-black/40 transition"
               >
                 <div className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center">
@@ -157,12 +178,17 @@ export function ProductDetail() {
               </button>
             )}
             {mainImage ? (
-               
-              <img
-                src={mainImage.url}
-                alt={mainImage.alt || product.name}
-                className="w-full h-full object-cover"
-              />
+              <>
+                { }
+                <img
+                  src={mainImage.url}
+                  alt={mainImage.alt || product.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute bottom-3 right-3 bg-black/70 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
+                  <ZoomIn className="h-3 w-3" /> Ampliar
+                </div>
+              </>
             ) : (
               <div className="w-full h-full flex items-center justify-center text-9xl">
                 🧶
@@ -174,6 +200,29 @@ export function ProductDetail() {
               </Badge>
             )}
           </div>
+
+          {/* Zoom modal */}
+          {zoomed && mainImage && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 cursor-zoom-out"
+              onClick={() => setZoomed(false)}
+            >
+              <button
+                className="absolute top-4 right-4 text-white/80 hover:text-white text-2xl"
+                onClick={() => setZoomed(false)}
+              >
+                ✕
+              </button>
+              { }
+              <img
+                src={mainImage.url}
+                alt={mainImage.alt || product.name}
+                className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+              />
+            </motion.div>
+          )}
 
           {/* Thumbs */}
           {product.images.length > 1 && (
@@ -379,10 +428,135 @@ export function ProductDetail() {
             <Button
               size="lg"
               variant="outline"
-              onClick={() => toast.info('Añadido a favoritos (próximamente)')}
+              onClick={() => {
+                toggleWishlist(product.id)
+                toast.success(
+                  isInWishlist(product.id)
+                    ? 'Quitado de favoritos'
+                    : 'Añadido a favoritos 💖',
+                )
+              }}
+              className={isInWishlist(product.id) ? 'border-primary text-primary' : ''}
+              title={isInWishlist(product.id) ? 'Quitar de favoritos' : 'Añadir a favoritos'}
             >
-              <Heart className="h-5 w-5" />
+              <Heart className={`h-5 w-5 ${isInWishlist(product.id) ? 'fill-primary' : ''}`} />
             </Button>
+          </div>
+
+          {/* Pedir por WhatsApp */}
+          {siteConfig?.whatsapp && (
+            <a
+              href={`https://wa.me/${siteConfig.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+                `¡Hola! 🧶 Me interesa este peluche: *${product.name}* (${formatPrice(product.price, currency)}). ¿Está disponible?`,
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full"
+            >
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full border-green-500 text-green-600 hover:bg-green-50 hover:text-green-700 dark:hover:bg-green-950"
+              >
+                <MessageCircle className="h-5 w-5 mr-2" />
+                Pedir por WhatsApp
+              </Button>
+            </a>
+          )}
+
+          {/* Notificación de stock cuando está agotado */}
+          {!inStock && (
+            <div className="border border-amber-300 bg-amber-50 dark:bg-amber-950/30 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Bell className="h-4 w-4 text-amber-600" />
+                <p className="font-medium text-amber-700 dark:text-amber-400">
+                  Producto agotado
+                </p>
+              </div>
+              {showStockNotify ? (
+                <form
+                  onSubmit={async (e) => {
+                    e.preventDefault()
+                    if (!stockNotifyEmail) return
+                    setStockNotifySubmitting(true)
+                    try {
+                      const res = await fetch('/api/stock-notify', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ productId: product.id, email: stockNotifyEmail }),
+                      })
+                      if (!res.ok) throw new Error('Error')
+                      toast.success('¡Te avisaremos cuando esté disponible!')
+                      setShowStockNotify(false)
+                      setStockNotifyEmail('')
+                    } catch {
+                      toast.error('Hubo un error, intenta nuevamente')
+                    } finally {
+                      setStockNotifySubmitting(false)
+                    }
+                  }}
+                  className="flex gap-2"
+                >
+                  <Input
+                    type="email"
+                    placeholder="tu@email.com"
+                    value={stockNotifyEmail}
+                    onChange={(e) => setStockNotifyEmail(e.target.value)}
+                    required
+                  />
+                  <Button type="submit" size="sm" disabled={stockNotifySubmitting}>
+                    {stockNotifySubmitting ? '...' : 'Avísame'}
+                  </Button>
+                </form>
+              ) : (
+                <button
+                  onClick={() => setShowStockNotify(true)}
+                  className="text-sm text-amber-700 dark:text-amber-400 underline hover:no-underline"
+                >
+                  Avísame cuando esté disponible →
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Compartir */}
+          <div className="flex items-center gap-2 pt-2">
+            <span className="text-sm text-muted-foreground flex items-center gap-1">
+              <Share2 className="h-4 w-4" /> Compartir:
+            </span>
+            {siteConfig?.whatsapp && (
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent(
+                  `¡Mira este peluche de CROCHETERA.CIX! 🧸 ${product.name} - ${formatPrice(product.price, currency)}`,
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-green-100 hover:bg-green-200 text-green-600 flex items-center justify-center transition"
+                title="Compartir por WhatsApp"
+              >
+                <MessageCircle className="h-4 w-4" />
+              </a>
+            )}
+            <a
+              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(typeof window !== 'undefined' ? window.location.href : '')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-9 h-9 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600 flex items-center justify-center transition"
+              title="Compartir en Facebook"
+            >
+              <Facebook className="h-4 w-4" />
+            </a>
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                `¡Mira este peluche tejido a mano! 🧸 ${product.name}`,
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-9 h-9 rounded-full bg-sky-100 hover:bg-sky-200 text-sky-600 flex items-center justify-center transition"
+              title="Compartir en Twitter/X"
+            >
+              <Twitter className="h-4 w-4" />
+            </a>
           </div>
 
           {/* Info envíos */}
@@ -396,41 +570,8 @@ export function ProductDetail() {
         </motion.div>
       </div>
 
-      {/* Reseñas */}
-      {product.reviews.length > 0 && (
-        <div className="mt-16">
-          <h2 className="font-display text-2xl font-bold mb-6">
-            Reseñas de clientes
-          </h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            {product.reviews.map((r) => (
-              <div key={r.id} className="p-4 rounded-lg border border-border bg-card">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary text-sm">
-                      {r.author.charAt(0)}
-                    </div>
-                    <span className="font-medium text-sm">{r.author}</span>
-                  </div>
-                  <div className="flex">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`h-3 w-3 ${
-                          i < r.rating
-                            ? 'fill-yellow-400 text-yellow-400'
-                            : 'text-muted-foreground'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </div>
-                <p className="text-sm text-muted-foreground">{r.comment}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Reseñas (componente con formulario y display) */}
+      <ReviewsSection productId={product.id} />
     </section>
   )
 }

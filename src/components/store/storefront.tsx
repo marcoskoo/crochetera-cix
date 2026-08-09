@@ -14,14 +14,25 @@ import { Footer } from './footer'
 import { ProductDetail } from './product-detail'
 import { Checkout } from './checkout'
 import { GalleryPage } from './gallery-page'
+import { FAQSection } from './faq-section'
+import { NewsletterSection } from './newsletter-section'
+import { RecentlyViewed } from './recently-viewed'
+import { WhatsAppFloating } from './whatsapp-floating'
+import { CookieConsent } from './cookie-consent'
+import { OrderTracking } from './order-tracking'
+import { CustomRequestForm } from './custom-request-form'
+import { WishlistPage } from './wishlist-page'
 import { AdminLoginModal } from '@/components/admin/admin-login-modal'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { QuickViewModal } from './quick-view-modal'
+import type { ProductWithRelations } from '@/lib/types'
 
 export function Storefront() {
   usePublicData()
   const storeSection = useStore((s) => s.storeSection)
   const adminAuthed = useStore((s) => s.adminAuthed)
   const setAdminAuthed = useStore((s) => s.setAdminAuthed)
+  const [quickViewProduct, setQuickViewProduct] = useState<ProductWithRelations | null>(null)
 
   // Verificar sesión admin al cargar
   useEffect(() => {
@@ -40,14 +51,17 @@ export function Storefront() {
         {storeSection === 'home' && (
           <>
             <Hero />
-            <FeaturedProducts />
+            <FeaturedProducts onQuickView={setQuickViewProduct} />
             <CategoriesGrid />
             <AboutSection />
             <Testimonials />
+            <FAQSection />
+            <NewsletterSection />
+            <RecentlyViewed />
             <ContactSection />
           </>
         )}
-        {storeSection === 'catalog' && <Catalog />}
+        {storeSection === 'catalog' && <Catalog onQuickView={setQuickViewProduct} />}
         {storeSection === 'product' && <ProductDetail />}
         {storeSection === 'cart' && <Checkout />}
         {storeSection === 'checkout' && <Checkout />}
@@ -59,9 +73,19 @@ export function Storefront() {
         )}
         {storeSection === 'contact' && <ContactSection />}
         {storeSection === 'gallery' && <GalleryPage />}
+        {storeSection === 'wishlist' && <WishlistPage />}
+        {storeSection === 'track' && <OrderTracking />}
+        {storeSection === 'custom' && <CustomRequestForm />}
       </main>
       <Footer />
+      <WhatsAppFloating />
+      <CookieConsent />
       <AdminLoginModal />
+      <QuickViewModal
+        product={quickViewProduct}
+        open={!!quickViewProduct}
+        onOpenChange={(v) => !v && setQuickViewProduct(null)}
+      />
     </div>
   )
 }

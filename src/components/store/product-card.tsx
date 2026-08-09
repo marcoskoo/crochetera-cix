@@ -5,7 +5,7 @@ import { useStore } from '@/lib/store'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Heart, ShoppingCart, Star } from 'lucide-react'
+import { Heart, ShoppingCart, Star, Eye } from 'lucide-react'
 import { formatPrice } from '@/lib/site'
 import type { ProductWithRelations } from '@/lib/types'
 import { toast } from 'sonner'
@@ -13,11 +13,14 @@ import { toast } from 'sonner'
 interface ProductCardProps {
   product: ProductWithRelations
   index?: number
+  onQuickView?: (product: ProductWithRelations) => void
 }
 
-export function ProductCard({ product, index = 0 }: ProductCardProps) {
+export function ProductCard({ product, index = 0, onQuickView }: ProductCardProps) {
   const openProduct = useStore((s) => s.openProduct)
   const addToCart = useStore((s) => s.addToCart)
+  const toggleWishlist = useStore((s) => s.toggleWishlist)
+  const isInWishlist = useStore((s) => s.isInWishlist)
   const siteConfig = useStore((s) => s.siteConfig)
   const currency = siteConfig?.currency || 'S/'
 
@@ -31,6 +34,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
     product.reviews.length > 0
       ? product.reviews.reduce((s, r) => s + r.rating, 0) / product.reviews.length
       : 0
+  const liked = isInWishlist(product.id)
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -46,6 +50,18 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
       imageUrl: mainImage?.url || null,
     })
     toast.success(`${product.name} agregado al carrito`)
+  }
+
+  const handleWishlist = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    toggleWishlist(product.id)
+    toast.success(liked ? 'Quitado de favoritos' : 'Añadido a favoritos 💖')
+  }
+
+  const handleQuickView = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (onQuickView) onQuickView(product)
+    else openProduct(product.id)
   }
 
   return (
@@ -91,15 +107,41 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
             )}
           </div>
 
-          {/* Quick add button */}
+          {/* Wishlist button (top-right) */}
           <Button
             size="icon"
-            onClick={handleQuickAdd}
-            disabled={!inStock}
-            className="absolute bottom-3 right-3 h-10 w-10 rounded-full shadow-lg opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 btn-crochet"
+            variant="ghost"
+            onClick={handleWishlist}
+            className={`absolute top-2 right-2 h-9 w-9 rounded-full bg-white/90 dark:bg-black/70 backdrop-blur shadow-sm hover:bg-white dark:hover:bg-black/90 transition-all ${
+              liked ? 'text-primary opacity-100' : 'opacity-0 group-hover:opacity-100'
+            }`}
           >
-            <ShoppingCart className="h-5 w-5" />
+            <Heart className={`h-4 w-4 ${liked ? 'fill-primary' : ''}`} />
           </Button>
+
+          {/* Quick actions (bottom) */}
+          <div className="absolute bottom-3 right-3 flex gap-1.5 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+            {onQuickView && (
+              <Button
+                size="icon"
+                variant="secondary"
+                onClick={handleQuickView}
+                className="h-10 w-10 rounded-full shadow-lg bg-white dark:bg-card hover:bg-muted"
+                title="Vista rápida"
+              >
+                <Eye className="h-4 w-4" />
+              </Button>
+            )}
+            <Button
+              size="icon"
+              onClick={handleQuickAdd}
+              disabled={!inStock}
+              className="h-10 w-10 rounded-full shadow-lg btn-crochet"
+              title="Agregar al carrito"
+            >
+              <ShoppingCart className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
 
         {/* Content */}

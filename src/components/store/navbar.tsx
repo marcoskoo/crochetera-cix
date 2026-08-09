@@ -11,10 +11,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { ShoppingCart, Menu, Heart, Search, X } from 'lucide-react'
+import { ShoppingCart, Menu, Heart, Search, X, Sparkles } from 'lucide-react'
 import { formatPrice } from '@/lib/site'
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
+import { ThemeToggle } from '@/components/shared/theme-toggle'
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -36,6 +37,7 @@ export function Navbar() {
   const setView = useStore((s) => s.setView)
   const adminAuthed = useStore((s) => s.adminAuthed)
   const siteConfig = useStore((s) => s.siteConfig)
+  const wishlistCount = useStore((s) => s.wishlist.length)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -55,6 +57,7 @@ export function Navbar() {
   const navLinks = [
     { label: 'Inicio', action: () => goToSection('home') },
     { label: 'Catálogo', action: () => { setCategory(null); goToSection('catalog') } },
+    { label: 'Personalizados', action: () => goToSection('custom') },
     { label: 'Galería', action: () => goToSection('gallery') },
     { label: 'Nosotros', action: () => goToSection('about') },
     { label: 'Contacto', action: () => goToSection('contact') },
@@ -119,6 +122,22 @@ export function Navbar() {
               <Button
                 variant="ghost"
                 size="icon"
+                onClick={() => goToSection('wishlist')}
+                className="relative h-10 w-10"
+                aria-label="Lista de deseos"
+                title="Lista de deseos"
+              >
+                <Heart className="h-5 w-5" />
+                {wishlistCount > 0 && (
+                  <Badge className="absolute -top-1 -right-1 h-5 min-w-5 px-1 flex items-center justify-center text-[10px] bg-destructive text-destructive-foreground">
+                    {wishlistCount}
+                  </Badge>
+                )}
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={() => setCartOpen(true)}
                 className="relative h-10 w-10"
                 aria-label="Carrito"
@@ -130,6 +149,10 @@ export function Navbar() {
                   </Badge>
                 )}
               </Button>
+
+              <div className="hidden md:block">
+                <ThemeToggle />
+              </div>
 
               {/* Admin button */}
               {adminAuthed && (

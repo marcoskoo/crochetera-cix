@@ -11,6 +11,11 @@ import {
   LayoutList,
   Image,
   MessageSquareQuote,
+  Star,
+  HelpCircle,
+  Mail,
+  Sparkles,
+  Bell,
 } from 'lucide-react'
 import type { AdminSection } from '@/lib/admin-types'
 
@@ -25,8 +30,13 @@ const navItems: NavItem[] = [
   { key: 'products', label: 'Productos', icon: Package },
   { key: 'categories', label: 'Categorías', icon: FolderTree },
   { key: 'orders', label: 'Pedidos', icon: ShoppingBag },
+  { key: 'reviews', label: 'Reseñas', icon: Star },
+  { key: 'customRequests', label: 'Pedidos custom', icon: Sparkles },
   { key: 'gallery', label: 'Galería', icon: Image },
   { key: 'testimonials', label: 'Testimonios', icon: MessageSquareQuote },
+  { key: 'faq', label: 'FAQ', icon: HelpCircle },
+  { key: 'newsletter', label: 'Newsletter', icon: Mail },
+  { key: 'stockNotifications', label: 'Alertas stock', icon: Bell },
   { key: 'sections', label: 'Secciones', icon: LayoutList },
   { key: 'site', label: 'Configuración', icon: Settings },
 ]

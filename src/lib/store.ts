@@ -15,6 +15,24 @@ type StoreSection =
   | 'about'
   | 'contact'
   | 'gallery'
+  | 'wishlist'
+  | 'track'
+  | 'custom'
+
+type AdminSection =
+  | 'dashboard'
+  | 'products'
+  | 'categories'
+  | 'orders'
+  | 'site'
+  | 'sections'
+  | 'gallery'
+  | 'testimonials'
+  | 'reviews'
+  | 'faq'
+  | 'newsletter'
+  | 'customRequests'
+  | 'stockNotifications'
 
 interface AppState {
   // Navegación
@@ -26,23 +44,22 @@ interface AppState {
 
   // Admin
   adminAuthed: boolean
-  adminSection:
-    | 'dashboard'
-    | 'products'
-    | 'categories'
-    | 'orders'
-    | 'site'
-    | 'sections'
-    | 'gallery'
-    | 'testimonials'
+  adminSection: AdminSection
 
   // Carrito
   cart: CartItem[]
+
+  // Wishlist (lista de deseos)
+  wishlist: string[] // array de productIds
+
+  // Productos vistos recientemente (hasta 8)
+  recentlyViewed: string[]
 
   // Datos cacheados del storefront
   siteConfig: SiteConfig | null
   products: ProductWithRelations[]
   cartOpen: boolean
+  wishlistOpen: boolean
   loginOpen: boolean
 
   // Acciones de navegación
@@ -54,7 +71,7 @@ interface AppState {
 
   // Acciones admin
   setAdminAuthed: (v: boolean) => void
-  setAdminSection: (s: AppState['adminSection']) => void
+  setAdminSection: (s: AdminSection) => void
 
   // Cache data
   setSiteConfig: (c: SiteConfig) => void
@@ -67,6 +84,14 @@ interface AppState {
   clearCart: () => void
   setCartOpen: (v: boolean) => void
   setLoginOpen: (v: boolean) => void
+
+  // Wishlist
+  toggleWishlist: (productId: string) => void
+  isInWishlist: (productId: string) => boolean
+  setWishlistOpen: (v: boolean) => void
+
+  // Recently viewed
+  trackView: (productId: string) => void
 
   // Helpers
   cartTotal: () => number
@@ -86,17 +111,27 @@ export const useStore = create<AppState>()(
       adminSection: 'dashboard',
 
       cart: [],
+      wishlist: [],
+      recentlyViewed: [],
 
       siteConfig: null,
       products: [],
       cartOpen: false,
+      wishlistOpen: false,
       loginOpen: false,
 
       setView: (v) => set({ view: v }),
       goToSection: (s) =>
         set({ view: 'store', storeSection: s, selectedProductId: null }),
-      openProduct: (id) =>
-        set({ view: 'store', storeSection: 'product', selectedProductId: id }),
+      openProduct: (id) => {
+        const state = get()
+        set({
+          view: 'store',
+          storeSection: 'product',
+          selectedProductId: id,
+          recentlyViewed: [id, ...state.recentlyViewed.filter((x) => x !== id)].slice(0, 8),
+        })
+      },
       setCategory: (slug) => set({ selectedCategory: slug, storeSection: 'catalog' }),
       setSearch: (q) => set({ searchQuery: q }),
 
@@ -134,6 +169,25 @@ export const useStore = create<AppState>()(
       setCartOpen: (v) => set({ cartOpen: v }),
       setLoginOpen: (v) => set({ loginOpen: v }),
 
+      // Wishlist
+      toggleWishlist: (productId) =>
+        set((state) => ({
+          wishlist: state.wishlist.includes(productId)
+            ? state.wishlist.filter((id) => id !== productId)
+            : [...state.wishlist, productId],
+        })),
+      isInWishlist: (productId) => get().wishlist.includes(productId),
+      setWishlistOpen: (v) => set({ wishlistOpen: v }),
+
+      // Recently viewed
+      trackView: (productId) =>
+        set((state) => ({
+          recentlyViewed: [
+            productId,
+            ...state.recentlyViewed.filter((x) => x !== productId),
+          ].slice(0, 8),
+        })),
+
       cartTotal: () => get().cart.reduce((sum, i) => sum + i.price * i.quantity, 0),
       cartCount: () => get().cart.reduce((sum, i) => sum + i.quantity, 0),
     }),
@@ -147,6 +201,8 @@ export const useStore = create<AppState>()(
         adminSection: state.adminSection,
         storeSection: state.storeSection,
         selectedCategory: state.selectedCategory,
+        wishlist: state.wishlist,
+        recentlyViewed: state.recentlyViewed,
       }),
     },
   ),

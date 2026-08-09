@@ -8,9 +8,13 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Search, SlidersHorizontal, X } from 'lucide-react'
-import type { Category } from '@/lib/types'
+import type { Category, ProductWithRelations } from '@/lib/types'
 
-export function Catalog() {
+interface CatalogProps {
+  onQuickView?: (product: ProductWithRelations) => void
+}
+
+export function Catalog({ onQuickView }: CatalogProps) {
   const products = useStore((s) => s.products)
   const selectedCategory = useStore((s) => s.selectedCategory)
   const searchQuery = useStore((s) => s.searchQuery)
@@ -147,7 +151,7 @@ export function Catalog() {
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {sorted.map((p, i) => (
-              <ProductCard key={p.id} product={p} index={i} />
+              <ProductCard key={p.id} product={p} index={i} onQuickView={onQuickView} />
             ))}
           </div>
         )}
