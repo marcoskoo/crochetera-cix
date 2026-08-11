@@ -5,7 +5,7 @@ import { useStore } from '@/lib/store'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Heart, ShoppingCart, Star, Eye } from 'lucide-react'
+import { Heart, ShoppingCart, Star, Eye, Play } from 'lucide-react'
 import { formatPrice } from '@/lib/site'
 import type { ProductWithRelations } from '@/lib/types'
 import { toast } from 'sonner'
@@ -100,6 +100,11 @@ export function ProductCard({ product, index = 0, onQuickView }: ProductCardProp
             {product.featured && (
               <Badge className="bg-primary text-primary-foreground">
                 ★ Destacado
+              </Badge>
+            )}
+            {product.videos.length > 0 && (
+              <Badge className="bg-black/80 text-white backdrop-blur-sm">
+                <Play className="h-2.5 w-2.5 mr-0.5 fill-white" /> Video
               </Badge>
             )}
             {!inStock && (
