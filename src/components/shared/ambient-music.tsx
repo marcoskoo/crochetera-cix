@@ -71,7 +71,7 @@ export function AmbientMusic() {
       variant="ghost"
       size="icon"
       onClick={toggle}
-      className="fixed bottom-4 right-20 z-30 h-10 w-10 rounded-full bg-card/80 backdrop-blur shadow-md hover:bg-card"
+      className="fixed bottom-20 right-4 z-30 h-10 w-10 rounded-full bg-card/80 backdrop-blur shadow-md hover:bg-card"
       aria-label={playing ? 'Silenciar música' : 'Reproducir música'}
       title={playing ? 'Silenciar música ambiental' : 'Música ambiental suave'}
     >

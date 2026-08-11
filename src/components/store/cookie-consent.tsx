@@ -36,7 +36,7 @@ export function CookieConsent() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: 'spring', damping: 20 }}
-          className="fixed bottom-4 left-4 right-4 md:left-4 md:right-auto md:max-w-md z-50"
+          className="fixed top-4 left-4 right-4 md:left-auto md:right-4 md:max-w-sm z-50"
         >
           <div className="bg-card border border-border rounded-2xl shadow-2xl p-5 relative">
             <button

@@ -50,7 +50,7 @@ export function SeasonalTheme() {
   }
 
   return (
-    <div className="fixed bottom-4 right-36 z-30">
+    <div className="fixed bottom-32 right-4 z-30">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
