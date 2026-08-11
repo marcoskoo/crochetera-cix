@@ -1,15 +1,19 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useStore } from '@/lib/store'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Heart, Sparkles, Star } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
+
+const SLIDESHOW_INTERVAL = 3500 // ms entre imágenes
 
 export function Hero() {
   const siteConfig = useStore((s) => s.siteConfig)
   const goToSection = useStore((s) => s.goToSection)
   const setCategory = useStore((s) => s.setCategory)
+  const products = useStore((s) => s.products)
+  const openProduct = useStore((s) => s.openProduct)
 
   const [floatingHearts] = useState<
     { id: number; x: number; delay: number; duration: number }[]
@@ -21,6 +25,46 @@ export function Hero() {
       duration: 8 + Math.random() * 6,
     })),
   )
+
+  // Filtrar productos que tengan al menos una imagen y aleatorizar orden
+  const slideshowImages = useMemo(() => {
+    const withImages = products
+      .filter((p) => p.status === 'active' && p.images.length > 0)
+      .map((p) => ({
+        productId: p.id,
+        url: p.images.find((i) => i.isMain)?.url || p.images[0].url,
+        name: p.name,
+        price: p.price,
+        alt: p.images.find((i) => i.isMain)?.alt || p.name,
+      }))
+    // Mezclar con Fisher-Yates
+    const shuffled = [...withImages]
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    }
+    return shuffled
+  }, [products])
+
+  const [currentIdx, setCurrentIdx] = useState(0)
+
+  // Avanzar el slideshow automáticamente
+  useEffect(() => {
+    if (slideshowImages.length <= 1) return
+    const timer = setInterval(() => {
+      setCurrentIdx((prev) => (prev + 1) % slideshowImages.length)
+    }, SLIDESHOW_INTERVAL)
+    return () => clearInterval(timer)
+  }, [slideshowImages.length])
+
+  // Reiniciar índice si cambia la lista
+  useEffect(() => {
+    setCurrentIdx(0)
+  }, [slideshowImages])
+
+  const currentImage = slideshowImages[currentIdx]
+  // Fallback si no hay imágenes de productos: usar heroImage del site config
+  const fallbackImage = siteConfig?.heroImage || '/uploads/hero-bt21-tata.jpg'
 
   return (
     <section className="relative overflow-hidden hero-gradient dark:hero-gradient-dark">
@@ -108,7 +152,7 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* Hero visual */}
+          {/* Hero visual - Slideshow de productos del catálogo */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -116,19 +160,96 @@ export function Hero() {
             className="relative"
           >
             <div className="relative aspect-square max-w-md mx-auto">
-              {/* Big crochet ball */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary via-accent to-secondary rounded-full opacity-90 shadow-2xl" />
-              <div className="absolute inset-4 bg-gradient-to-tr from-accent to-primary rounded-full opacity-80" />
-              <div className="absolute inset-8 bg-gradient-to-bl from-secondary to-accent rounded-full" />
+              {/* Big crochet circle background (decorative) */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary via-accent to-secondary rounded-full opacity-30 shadow-2xl blur-2xl" />
 
-              {/* Emoji center */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-[12rem] md:text-[16rem] yarn-float drop-shadow-2xl">🧸</span>
+              {/* Slideshow de imágenes */}
+              <div
+                className="absolute inset-2 rounded-full overflow-hidden shadow-2xl border-4 border-card yarn-float cursor-pointer group"
+                onClick={() => currentImage && openProduct(currentImage.productId)}
+                title={currentImage ? `Ver ${currentImage.name}` : 'Ver catálogo'}
+              >
+                <AnimatePresence mode="wait">
+                  {currentImage ? (
+                    <motion.div
+                      key={currentImage.url}
+                      initial={{ opacity: 0, scale: 1.1 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.6, ease: 'easeInOut' }}
+                      className="absolute inset-0"
+                    >
+                      { }
+                      <img
+                        src={currentImage.url}
+                        alt={currentImage.alt}
+                        className="w-full h-full object-cover"
+                      />
+                      {/* Overlay con info del producto */}
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 pt-12">
+                        <motion.div
+                          initial={{ y: 20, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          transition={{ delay: 0.3 }}
+                        >
+                          <p className="text-white font-semibold text-sm line-clamp-1">
+                            {currentImage.name}
+                          </p>
+                          <p className="text-primary-foreground font-bold text-lg">
+                            {siteConfig?.currency || 'S/'} {currentImage.price.toFixed(2)}
+                          </p>
+                        </motion.div>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="fallback"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="absolute inset-0"
+                    >
+                      { }
+                      <img
+                        src={fallbackImage}
+                        alt="Peluche tejido a crochet CROCHETERA.CIX"
+                        className="w-full h-full object-cover"
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Indicador "click para ver" */}
+                <div className="absolute top-3 right-3 bg-card/90 backdrop-blur rounded-full px-3 py-1 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                  👆 Ver detalle
+                </div>
               </div>
+
+              {/* Indicadores de posición (dots) */}
+              {slideshowImages.length > 1 && (
+                <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
+                  {slideshowImages.slice(0, 8).map((img, i) => (
+                    <button
+                      key={img.productId}
+                      onClick={() => setCurrentIdx(i)}
+                      className={`h-2 rounded-full transition-all ${
+                        i === currentIdx
+                          ? 'w-6 bg-primary'
+                          : 'w-2 bg-primary/30 hover:bg-primary/50'
+                      }`}
+                      aria-label={`Ir a imagen ${i + 1}`}
+                    />
+                  ))}
+                  {slideshowImages.length > 8 && (
+                    <span className="text-xs text-muted-foreground ml-1">
+                      +{slideshowImages.length - 8}
+                    </span>
+                  )}
+                </div>
+              )}
 
               {/* Floating badges */}
               <motion.div
-                className="absolute top-4 -left-4 bg-card rounded-2xl shadow-lg p-3 border border-border"
+                className="absolute top-4 -left-4 bg-card rounded-2xl shadow-lg p-3 border border-border z-10"
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 3, repeat: Infinity }}
               >
@@ -142,7 +263,7 @@ export function Hero() {
               </motion.div>
 
               <motion.div
-                className="absolute bottom-8 -right-4 bg-card rounded-2xl shadow-lg p-3 border border-border"
+                className="absolute bottom-8 -right-4 bg-card rounded-2xl shadow-lg p-3 border border-border z-10"
                 animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
               >
@@ -156,13 +277,21 @@ export function Hero() {
               </motion.div>
 
               <motion.div
-                className="absolute top-1/2 -right-8 bg-card rounded-2xl shadow-lg p-3 border border-border"
+                className="absolute top-1/2 -right-8 bg-card rounded-2xl shadow-lg p-3 border border-border z-10"
                 animate={{ y: [0, -8, 0] }}
                 transition={{ duration: 4, repeat: Infinity, delay: 1 }}
               >
                 <p className="text-xs font-bold">🧶 Hilo premium</p>
               </motion.div>
             </div>
+
+            {/* Contador de productos */}
+            {slideshowImages.length > 0 && (
+              <p className="text-center mt-6 text-sm text-muted-foreground">
+                Mostrando <span className="font-bold text-primary">{currentIdx + 1}</span> de{' '}
+                <span className="font-bold text-primary">{slideshowImages.length}</span> peluches del catálogo
+              </p>
+            )}
           </motion.div>
         </div>
       </div>
