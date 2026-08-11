@@ -18,6 +18,10 @@ type StoreSection =
   | 'wishlist'
   | 'track'
   | 'custom'
+  | 'blog'
+  | 'blogPost'
+  | 'compare'
+  | 'linktree'
 
 type AdminSection =
   | 'dashboard'
@@ -40,6 +44,10 @@ type AdminSection =
   | 'stories'
   | 'loyalty'
   | 'analytics'
+  | 'costs'
+  | 'agenda'
+  | 'backups'
+  | 'emails'
 
 interface AppState {
   // Navegación
@@ -58,6 +66,12 @@ interface AppState {
 
   // Wishlist (lista de deseos)
   wishlist: string[] // array de productIds
+
+  // Comparar productos (hasta 4)
+  compareList: string[] // array de productIds
+
+  // Blog
+  selectedBlogPostId: string | null
 
   // Productos vistos recientemente (hasta 8)
   recentlyViewed: string[]
@@ -97,6 +111,13 @@ interface AppState {
   isInWishlist: (productId: string) => boolean
   setWishlistOpen: (v: boolean) => void
 
+  // Comparar productos
+  toggleCompare: (productId: string) => void
+  clearCompare: () => void
+
+  // Blog
+  openBlogPost: (id: string) => void
+
   // Recently viewed
   trackView: (productId: string) => void
 
@@ -120,6 +141,8 @@ export const useStore = create<AppState>()(
       cart: [],
       wishlist: [],
       recentlyViewed: [],
+      compareList: [],
+      selectedBlogPostId: null,
 
       siteConfig: null,
       products: [],
@@ -195,6 +218,23 @@ export const useStore = create<AppState>()(
           ].slice(0, 8),
         })),
 
+      // Comparar productos (máximo 4)
+      toggleCompare: (productId) =>
+        set((state) => {
+          if (state.compareList.includes(productId)) {
+            return { compareList: state.compareList.filter((id) => id !== productId) }
+          }
+          if (state.compareList.length >= 4) {
+            return { compareList: [...state.compareList.slice(1), productId] }
+          }
+          return { compareList: [...state.compareList, productId] }
+        }),
+      clearCompare: () => set({ compareList: [] }),
+
+      // Blog: abrir un artículo individual
+      openBlogPost: (id) =>
+        set({ view: 'store', storeSection: 'blogPost', selectedBlogPostId: id }),
+
       cartTotal: () => get().cart.reduce((sum, i) => sum + i.price * i.quantity, 0),
       cartCount: () => get().cart.reduce((sum, i) => sum + i.quantity, 0),
     }),
@@ -210,6 +250,7 @@ export const useStore = create<AppState>()(
         selectedCategory: state.selectedCategory,
         wishlist: state.wishlist,
         recentlyViewed: state.recentlyViewed,
+        compareList: state.compareList,
       }),
     },
   ),

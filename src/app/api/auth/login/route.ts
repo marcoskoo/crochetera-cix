@@ -1,7 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyCredentials, createSession, SESSION_COOKIE_NAME, SESSION_MAX_AGE } from '@/lib/auth'
+import { authRateLimit, getClientIP } from '@/lib/rate-limit'
 
 export async function POST(req: NextRequest) {
+  // Rate limiting: máximo 10 intentos por IP cada 15 minutos
+  const clientIP = getClientIP(req)
+  const limit = authRateLimit(clientIP)
+  if (!limit.allowed) {
+    return NextResponse.json(
+      {
+        error: `Demasiados intentos. Intenta de nuevo en ${Math.ceil(limit.resetIn / 60000)} minutos.`,
+      },
+      {
+        status: 429,
+        headers: {
+          'Retry-After': String(Math.ceil(limit.resetIn / 1000)),
+        },
+      },
+    )
+  }
+
   const { username, password } = await req.json()
   if (!verifyCredentials(username, password)) {
     return NextResponse.json(
@@ -11,11 +29,6 @@ export async function POST(req: NextRequest) {
   }
   const token = await createSession(username)
   const res = NextResponse.json({ ok: true, username })
-  // Detectar si la conexión original del cliente fue HTTPS vía el header
-  // X-Forwarded-Proto que inyecta el proxy Caddy. NO usar NODE_ENV porque
-  // en el sandbox la conexión interna Caddy→Next.js es HTTP aunque el
-  // cliente navegue por HTTPS, y poner secure=true haría que el navegador
-  // rechazara la cookie.
   const forwardedProto = req.headers.get('x-forwarded-proto') || ''
   const isHttps = forwardedProto.toLowerCase() === 'https'
   res.cookies.set(SESSION_COOKIE_NAME, token, {

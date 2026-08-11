@@ -23,6 +23,10 @@ import { AdminBundles } from './sections/admin-bundles'
 import { AdminStories } from './sections/admin-stories'
 import { AdminLoyalty } from './sections/admin-loyalty'
 import { AdminAnalytics } from './sections/admin-analytics'
+import { AdminCosts } from './sections/admin-costs'
+import { AdminAgenda } from './sections/admin-agenda'
+import { AdminBackups } from './sections/admin-backups'
+import { AdminEmails } from './sections/admin-emails'
 import { Button } from '@/components/ui/button'
 import { Menu, Store, LogOut } from 'lucide-react'
 import {
@@ -59,7 +63,9 @@ export function AdminPanel() {
     products: 'Productos',
     categories: 'Categorías',
     bundles: 'Bundles / Combos',
+    costs: 'Costos y márgenes',
     orders: 'Pedidos',
+    agenda: 'Agenda de producción',
     reviews: 'Reseñas',
     questions: 'Preguntas y respuestas',
     customRequests: 'Pedidos personalizados',
@@ -71,7 +77,9 @@ export function AdminPanel() {
     testimonials: 'Testimonios',
     faq: 'Preguntas frecuentes',
     newsletter: 'Newsletter',
+    emails: 'Emails',
     stockNotifications: 'Alertas de stock',
+    backups: 'Backups',
     sections: 'Secciones',
     site: 'Configuración del sitio',
   }
@@ -163,7 +171,9 @@ export function AdminPanel() {
           {adminSection === 'products' && <AdminProducts />}
           {adminSection === 'categories' && <AdminCategories />}
           {adminSection === 'bundles' && <AdminBundles />}
+          {adminSection === 'costs' && <AdminCosts />}
           {adminSection === 'orders' && <AdminOrders />}
+          {adminSection === 'agenda' && <AdminAgenda />}
           {adminSection === 'reviews' && <AdminReviews />}
           {adminSection === 'questions' && <AdminQuestions />}
           {adminSection === 'customRequests' && <AdminCustomRequests />}
@@ -175,7 +185,9 @@ export function AdminPanel() {
           {adminSection === 'testimonials' && <AdminTestimonials />}
           {adminSection === 'faq' && <AdminFAQ />}
           {adminSection === 'newsletter' && <AdminNewsletter />}
+          {adminSection === 'emails' && <AdminEmails />}
           {adminSection === 'stockNotifications' && <AdminStockNotifications />}
+          {adminSection === 'backups' && <AdminBackups />}
           {adminSection === 'sections' && <AdminSections />}
           {adminSection === 'site' && <AdminSite />}
         </div>

@@ -122,6 +122,14 @@ export function Footer() {
                   Lista de deseos
                 </button>
               </li>
+              <li>
+                <button
+                  onClick={() => goToSection('linktree')}
+                  className="text-background/70 hover:text-primary transition-colors"
+                >
+                  🔗 Links
+                </button>
+              </li>
             </ul>
           </div>
 

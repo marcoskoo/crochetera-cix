@@ -24,8 +24,16 @@ import { CookieConsent } from './cookie-consent'
 import { OrderTracking } from './order-tracking'
 import { CustomRequestForm } from './custom-request-form'
 import { WishlistPage } from './wishlist-page'
+import { ComparePage } from './compare-page'
+import { BlogSection } from './blog-section'
+import { BlogPage } from './blog-page'
+import { BlogPostView } from './blog-post-view'
+import { LinktreePage } from './linktree-page'
 import { AbandonedCartRecovery } from './abandoned-cart-recovery'
 import { AdminLoginModal } from '@/components/admin/admin-login-modal'
+import { AmbientMusic } from '@/components/shared/ambient-music'
+import { CustomCursor } from '@/components/shared/custom-cursor'
+import { SeasonalTheme } from '@/components/shared/seasonal-theme'
 import { useEffect, useState } from 'react'
 import { QuickViewModal } from './quick-view-modal'
 import type { ProductWithRelations } from '@/lib/types'
@@ -59,6 +67,7 @@ export function Storefront() {
             <BundlesSection />
             <AboutSection />
             <Testimonials />
+            <BlogSection />
             <FAQSection />
             <NewsletterSection />
             <RecentlyViewed />
@@ -80,11 +89,18 @@ export function Storefront() {
         {storeSection === 'wishlist' && <WishlistPage />}
         {storeSection === 'track' && <OrderTracking />}
         {storeSection === 'custom' && <CustomRequestForm />}
+        {storeSection === 'blog' && <BlogPage />}
+        {storeSection === 'blogPost' && <BlogPostView />}
+        {storeSection === 'compare' && <ComparePage />}
+        {storeSection === 'linktree' && <LinktreePage />}
       </main>
       <Footer />
       <WhatsAppFloating />
       <CookieConsent />
       <AbandonedCartRecovery />
+      <AmbientMusic />
+      <SeasonalTheme />
+      <CustomCursor />
       <AdminLoginModal />
       <QuickViewModal
         product={quickViewProduct}

@@ -32,6 +32,8 @@ import { formatPrice, getEmbedUrl, detectVideoType } from '@/lib/site'
 import { toast } from 'sonner'
 import type { ProductWithRelations } from '@/lib/types'
 import { ReviewsSection } from './reviews-section'
+import { TikTokShareButton } from './tiktok-share'
+import { ProductQRCode } from './product-qr'
 
 export function ProductDetail() {
   const selectedProductId = useStore((s) => s.selectedProductId)
@@ -557,7 +559,11 @@ export function ProductDetail() {
             >
               <Twitter className="h-4 w-4" />
             </a>
+            <TikTokShareButton productName={product.name} />
           </div>
+
+          {/* QR Code */}
+          <ProductQRCode productId={product.id} productName={product.name} />
 
           {/* Info envíos */}
           <div className="bg-accent/20 rounded-xl p-4 text-sm">

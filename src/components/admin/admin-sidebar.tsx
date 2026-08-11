@@ -23,6 +23,10 @@ import {
   Camera,
   Gift,
   BarChart3,
+  DollarSign,
+  CalendarDays,
+  DatabaseBackup,
+  MailCheck,
 } from 'lucide-react'
 import type { AdminSection } from '@/lib/admin-types'
 
@@ -38,7 +42,9 @@ const navItems: NavItem[] = [
   { key: 'products', label: 'Productos', icon: Package },
   { key: 'categories', label: 'Categorías', icon: FolderTree },
   { key: 'bundles', label: 'Bundles', icon: Box },
+  { key: 'costs', label: 'Costos/Márgenes', icon: DollarSign },
   { key: 'orders', label: 'Pedidos', icon: ShoppingBag },
+  { key: 'agenda', label: 'Agenda', icon: CalendarDays },
   { key: 'reviews', label: 'Reseñas', icon: Star },
   { key: 'questions', label: 'Preguntas', icon: MessageCircle },
   { key: 'customRequests', label: 'Pedidos custom', icon: Sparkles },
@@ -50,7 +56,9 @@ const navItems: NavItem[] = [
   { key: 'testimonials', label: 'Testimonios', icon: MessageSquareQuote },
   { key: 'faq', label: 'FAQ', icon: HelpCircle },
   { key: 'newsletter', label: 'Newsletter', icon: Mail },
+  { key: 'emails', label: 'Emails', icon: MailCheck },
   { key: 'stockNotifications', label: 'Alertas stock', icon: Bell },
+  { key: 'backups', label: 'Backups', icon: DatabaseBackup },
   { key: 'sections', label: 'Secciones', icon: LayoutList },
   { key: 'site', label: 'Configuración', icon: Settings },
 ]

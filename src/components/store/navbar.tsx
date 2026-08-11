@@ -16,6 +16,7 @@ import { formatPrice } from '@/lib/site'
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
 import { ThemeToggle } from '@/components/shared/theme-toggle'
+import { LanguageSwitcher } from '@/components/shared/language-switcher'
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -152,6 +153,9 @@ export function Navbar() {
 
               <div className="hidden md:block">
                 <ThemeToggle />
+              </div>
+              <div className="hidden md:block">
+                <LanguageSwitcher />
               </div>
 
               {/* Admin button */}
