@@ -16,6 +16,13 @@ import { AdminFAQ } from './sections/admin-faq'
 import { AdminNewsletter } from './sections/admin-newsletter'
 import { AdminCustomRequests } from './sections/admin-custom-requests'
 import { AdminStockNotifications } from './sections/admin-stock-notifications'
+import { AdminCoupons } from './sections/admin-coupons'
+import { AdminBlog } from './sections/admin-blog'
+import { AdminQuestions } from './sections/admin-questions'
+import { AdminBundles } from './sections/admin-bundles'
+import { AdminStories } from './sections/admin-stories'
+import { AdminLoyalty } from './sections/admin-loyalty'
+import { AdminAnalytics } from './sections/admin-analytics'
 import { Button } from '@/components/ui/button'
 import { Menu, Store, LogOut } from 'lucide-react'
 import {
@@ -33,11 +40,6 @@ export function AdminPanel() {
   const adminAuthed = useStore((s) => s.adminAuthed)
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  // Si por algún motivo adminAuthed es false al montar (p.ej. tras reload
-  // sin cookie válida), redirigir al store. NO hacemos auto-check de la
-  // cookie cada vez que se monta el panel porque puede causar race conditions
-  // con el flujo de login (la cookie acaba de setearse y un fetch inmediato
-  // puede no enviarla todavía).
   useEffect(() => {
     if (!adminAuthed) {
       setView('store')
@@ -49,6 +51,29 @@ export function AdminPanel() {
     setAdminAuthed(false)
     setView('store')
     toast.success('Sesión cerrada')
+  }
+
+  const titles: Record<string, string> = {
+    dashboard: 'Dashboard',
+    analytics: 'Analíticas',
+    products: 'Productos',
+    categories: 'Categorías',
+    bundles: 'Bundles / Combos',
+    orders: 'Pedidos',
+    reviews: 'Reseñas',
+    questions: 'Preguntas y respuestas',
+    customRequests: 'Pedidos personalizados',
+    coupons: 'Cupones de descuento',
+    loyalty: 'Programa de puntos',
+    blog: 'Blog',
+    stories: 'Stories del taller',
+    gallery: 'Galería',
+    testimonials: 'Testimonios',
+    faq: 'Preguntas frecuentes',
+    newsletter: 'Newsletter',
+    stockNotifications: 'Alertas de stock',
+    sections: 'Secciones',
+    site: 'Configuración del sitio',
   }
 
   return (
@@ -123,19 +148,7 @@ export function AdminPanel() {
           <div className="ml-12 md:ml-0 flex items-center justify-between">
             <div>
               <h1 className="font-display text-2xl md:text-3xl font-bold capitalize">
-                {adminSection === 'dashboard' && 'Dashboard'}
-                {adminSection === 'products' && 'Productos'}
-                {adminSection === 'categories' && 'Categorías'}
-                {adminSection === 'orders' && 'Pedidos'}
-                {adminSection === 'reviews' && 'Reseñas'}
-                {adminSection === 'customRequests' && 'Pedidos personalizados'}
-                {adminSection === 'gallery' && 'Galería'}
-                {adminSection === 'testimonials' && 'Testimonios'}
-                {adminSection === 'faq' && 'Preguntas frecuentes'}
-                {adminSection === 'newsletter' && 'Newsletter'}
-                {adminSection === 'stockNotifications' && 'Alertas de stock'}
-                {adminSection === 'sections' && 'Secciones'}
-                {adminSection === 'site' && 'Configuración del sitio'}
+                {titles[adminSection] || 'Admin'}
               </h1>
               <p className="text-sm text-muted-foreground">
                 Panel de administración · CROCHETERA.CIX
@@ -146,11 +159,18 @@ export function AdminPanel() {
 
         <div className="p-4 md:p-8">
           {adminSection === 'dashboard' && <AdminDashboard />}
+          {adminSection === 'analytics' && <AdminAnalytics />}
           {adminSection === 'products' && <AdminProducts />}
           {adminSection === 'categories' && <AdminCategories />}
+          {adminSection === 'bundles' && <AdminBundles />}
           {adminSection === 'orders' && <AdminOrders />}
           {adminSection === 'reviews' && <AdminReviews />}
+          {adminSection === 'questions' && <AdminQuestions />}
           {adminSection === 'customRequests' && <AdminCustomRequests />}
+          {adminSection === 'coupons' && <AdminCoupons />}
+          {adminSection === 'loyalty' && <AdminLoyalty />}
+          {adminSection === 'blog' && <AdminBlog />}
+          {adminSection === 'stories' && <AdminStories />}
           {adminSection === 'gallery' && <AdminGallery />}
           {adminSection === 'testimonials' && <AdminTestimonials />}
           {adminSection === 'faq' && <AdminFAQ />}

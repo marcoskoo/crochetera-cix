@@ -79,6 +79,8 @@ model Product {
   reviews     Review[]
   orderItems  OrderItem[]
   stockNotifications StockNotification[]
+  questions   ProductQuestion[]
+  bundleItems BundleItem[]
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 }
@@ -235,4 +237,129 @@ model CustomRequest {
   notes       String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+// Cupones de descuento
+model Coupon {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  type        String   @default("percent") // percent | fixed
+  value       Float    // 10 = 10% off, or 20 = S/ 20 off
+  minOrder    Float?   // monto mínimo del pedido
+  maxUses     Int?     // null = ilimitado
+  usedCount   Int      @default(0)
+  validFrom   DateTime?
+  validUntil  DateTime?
+  active      Boolean  @default(true)
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Blog/artículos
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  excerpt     String
+  content     String
+  coverImage  String?
+  author      String   @default("CROCHETERA.CIX")
+  tags        String?
+  published   Boolean  @default(false)
+  featured    Boolean  @default(false)
+  views       Int      @default(0)
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Preguntas y respuestas en productos
+model ProductQuestion {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  author    String
+  question  String
+  answer    String?
+  answeredBy String?
+  approved  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Bundles / Combos de productos
+model Bundle {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String
+  price       Float    // precio del bundle (con descuento)
+  originalTotal Float  // suma de precios individuales
+  imageUrl    String?
+  active      Boolean  @default(true)
+  featured    Boolean  @default(false)
+  items       BundleItem[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model BundleItem {
+  id        String  @id @default(cuid())
+  bundleId  String
+  bundle    Bundle  @relation(fields: [bundleId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int     @default(1)
+}
+
+// Programa de puntos (fidelización)
+model LoyaltyAccount {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  phone     String?
+  points    Int      @default(0)
+  totalEarned Int    @default(0)
+  totalSpent Int     @default(0)
+  transactions LoyaltyTransaction[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LoyaltyTransaction {
+  id        String   @id @default(cuid())
+  accountId String
+  account   LoyaltyAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  type      String   // earn | spend
+  points    Int
+  reason    String   // purchase | signup | referral | redemption
+  orderId   String?
+  createdAt DateTime @default(now())
+}
+
+// Carrito abandonado
+model AbandonedCart {
+  id        String   @id @default(cuid())
+  email     String?
+  phone     String?
+  items     String   // JSON de items
+  total     Float
+  recovered Boolean  @default(false)
+  notifiedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Stories del taller (efímeras, 24h)
+model Story {
+  id        String   @id @default(cuid())
+  title     String?
+  imageUrl  String
+  videoUrl  String?
+  link      String?
+  expiresAt DateTime
+  active    Boolean  @default(true)
+  views     Int      @default(0)
+  createdAt DateTime @default(now())
 }

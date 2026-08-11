@@ -33,6 +33,13 @@ type AdminSection =
   | 'newsletter'
   | 'customRequests'
   | 'stockNotifications'
+  | 'coupons'
+  | 'blog'
+  | 'questions'
+  | 'bundles'
+  | 'stories'
+  | 'loyalty'
+  | 'analytics'
 
 interface AppState {
   // Navegación

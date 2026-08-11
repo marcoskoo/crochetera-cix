@@ -4,9 +4,11 @@ import { useStore } from '@/lib/store'
 import { usePublicData } from '@/components/shared/use-public-data'
 import { Navbar } from './navbar'
 import { Hero } from './hero'
+import { StoriesBar } from './stories-bar'
 import { FeaturedProducts } from './featured-products'
 import { CategoriesGrid } from './categories-grid'
-import { Catalog } from './catalog'
+import { BundlesSection } from './bundles-section'
+import { CatalogAdvanced } from './catalog-advanced'
 import { AboutSection } from './about-section'
 import { Testimonials } from './testimonials'
 import { ContactSection } from './contact-section'
@@ -22,6 +24,7 @@ import { CookieConsent } from './cookie-consent'
 import { OrderTracking } from './order-tracking'
 import { CustomRequestForm } from './custom-request-form'
 import { WishlistPage } from './wishlist-page'
+import { AbandonedCartRecovery } from './abandoned-cart-recovery'
 import { AdminLoginModal } from '@/components/admin/admin-login-modal'
 import { useEffect, useState } from 'react'
 import { QuickViewModal } from './quick-view-modal'
@@ -34,7 +37,6 @@ export function Storefront() {
   const setAdminAuthed = useStore((s) => s.setAdminAuthed)
   const [quickViewProduct, setQuickViewProduct] = useState<ProductWithRelations | null>(null)
 
-  // Verificar sesión admin al cargar
   useEffect(() => {
     fetch('/api/auth/check')
       .then((r) => r.json())
@@ -51,8 +53,10 @@ export function Storefront() {
         {storeSection === 'home' && (
           <>
             <Hero />
+            <StoriesBar />
             <FeaturedProducts onQuickView={setQuickViewProduct} />
             <CategoriesGrid />
+            <BundlesSection />
             <AboutSection />
             <Testimonials />
             <FAQSection />
@@ -61,7 +65,7 @@ export function Storefront() {
             <ContactSection />
           </>
         )}
-        {storeSection === 'catalog' && <Catalog onQuickView={setQuickViewProduct} />}
+        {storeSection === 'catalog' && <CatalogAdvanced />}
         {storeSection === 'product' && <ProductDetail />}
         {storeSection === 'cart' && <Checkout />}
         {storeSection === 'checkout' && <Checkout />}
@@ -80,6 +84,7 @@ export function Storefront() {
       <Footer />
       <WhatsAppFloating />
       <CookieConsent />
+      <AbandonedCartRecovery />
       <AdminLoginModal />
       <QuickViewModal
         product={quickViewProduct}

@@ -11,6 +11,9 @@ import { Card } from '@/components/ui/card'
 import { ArrowLeft, Check, ShoppingBag } from 'lucide-react'
 import { formatPrice } from '@/lib/site'
 import { toast } from 'sonner'
+import { YapePlinPayment } from './yape-plin-payment'
+import { LoyaltyWidget } from './loyalty-widget'
+import { Confetti } from './confetti'
 
 export function Checkout() {
   const cart = useStore((s) => s.cart)
@@ -70,27 +73,30 @@ export function Checkout() {
 
   if (success) {
     return (
-      <section className="container mx-auto px-4 py-20">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="max-w-lg mx-auto text-center"
-        >
-          <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
-            <Check className="h-10 w-10 text-green-600" />
-          </div>
-          <h1 className="font-display text-3xl font-bold mb-4">
-            ¡Pedido recibido!
-          </h1>
-          <p className="text-muted-foreground mb-6">
-            Gracias por tu compra. Te contactaremos muy pronto por WhatsApp o
-            teléfono para coordinar el pago y la entrega.
-          </p>
-          <Button onClick={() => goToSection('home')} className="btn-crochet">
-            Volver al inicio
-          </Button>
-        </motion.div>
-      </section>
+      <>
+        <Confetti trigger={success} />
+        <section className="container mx-auto px-4 py-20">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="max-w-lg mx-auto text-center"
+          >
+            <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
+              <Check className="h-10 w-10 text-green-600" />
+            </div>
+            <h1 className="font-display text-3xl font-bold mb-4">
+              ¡Pedido recibido! 🎉
+            </h1>
+            <p className="text-muted-foreground mb-6">
+              Gracias por tu compra. Te contactaremos muy pronto por WhatsApp o
+              teléfono para coordinar el pago y la entrega.
+            </p>
+            <Button onClick={() => goToSection('home')} className="btn-crochet">
+              Volver al inicio
+            </Button>
+          </motion.div>
+        </section>
+      </>
     )
   }
 
@@ -190,6 +196,8 @@ export function Checkout() {
 
         {/* Resumen */}
         <div className="space-y-4">
+          <LoyaltyWidget />
+          <YapePlinPayment />
           <Card className="p-6 sticky top-24">
             <h2 className="font-semibold text-lg mb-4">Resumen del pedido</h2>
             <div className="space-y-3 max-h-72 overflow-y-auto pr-1">

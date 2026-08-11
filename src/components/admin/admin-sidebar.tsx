@@ -16,6 +16,13 @@ import {
   Mail,
   Sparkles,
   Bell,
+  Ticket,
+  BookOpen,
+  MessageCircle,
+  Box,
+  Camera,
+  Gift,
+  BarChart3,
 } from 'lucide-react'
 import type { AdminSection } from '@/lib/admin-types'
 
@@ -27,11 +34,18 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { key: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { key: 'analytics', label: 'Analíticas', icon: BarChart3 },
   { key: 'products', label: 'Productos', icon: Package },
   { key: 'categories', label: 'Categorías', icon: FolderTree },
+  { key: 'bundles', label: 'Bundles', icon: Box },
   { key: 'orders', label: 'Pedidos', icon: ShoppingBag },
   { key: 'reviews', label: 'Reseñas', icon: Star },
+  { key: 'questions', label: 'Preguntas', icon: MessageCircle },
   { key: 'customRequests', label: 'Pedidos custom', icon: Sparkles },
+  { key: 'coupons', label: 'Cupones', icon: Ticket },
+  { key: 'loyalty', label: 'Puntos', icon: Gift },
+  { key: 'blog', label: 'Blog', icon: BookOpen },
+  { key: 'stories', label: 'Stories', icon: Camera },
   { key: 'gallery', label: 'Galería', icon: Image },
   { key: 'testimonials', label: 'Testimonios', icon: MessageSquareQuote },
   { key: 'faq', label: 'FAQ', icon: HelpCircle },
