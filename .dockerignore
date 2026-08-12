@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+db/*.db
+backups
+dev.log
+*.md
+upload
+agent-ctx
+skills
+tests
