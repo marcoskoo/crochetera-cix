@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Manual CROCHETERA.CIX</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+@page { size: 720px 1020px; margin: 0; }
+:root {
+    --c-bg: #FFFBF5;
+    --c-card: #FFFFFF;
+    --c-text: #4A3C28;
+    --c-muted: #8B7E6A;
+    --c-accent: #E91E63;
+    --c-accent-light: #F8BBD0;
+    --c-border: #E8DDD0;
+    --c-code-bg: #F5F0E8;
+}
+html, body {
+    margin: 0; padding: 0; width: 720px;
+    background: var(--c-bg);
+    color: var(--c-text);
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 14px; line-height: 1.7;
+}
+@media screen {
+    html { display: flex; justify-content: center; background: #e0d6c8; }
+    body { margin: 20px auto; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+}
+
+/* Cover */
+.cover {
+    width: 720px; height: 1020px; box-sizing: border-box;
+    break-after: page; overflow: hidden;
+    background: linear-gradient(135deg, #FDF2F8 0%, #FFFBF5 40%, #FFF5E6 100%);
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 70px; position: relative;
+}
+.cover::before {
+    content: ''; position: absolute; top: -80px; right: -80px;
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(233,30,99,0.15), transparent 70%);
+    border-radius: 50%;
+}
+.cover::after {
+    content: ''; position: absolute; bottom: -60px; left: -60px;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(248,187,208,0.2), transparent 70%);
+    border-radius: 50%;
+}
+.cover-logo {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--c-accent), var(--c-accent-light));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900;
+    color: white; margin-bottom: 24px; box-shadow: 0 8px 30px rgba(233,30,99,0.3);
+    z-index: 1;
+}
+.cover-tag {
+    background: rgba(233,30,99,0.1); color: var(--c-accent);
+    padding: 6px 20px; border-radius: 50px; font-size: 12px; font-weight: 600;
+    margin-bottom: 16px; letter-spacing: 1px; z-index: 1;
+}
+.cover-title {
+    font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900;
+    color: var(--c-text); text-align: center; line-height: 1.1;
+    margin: 0 0 8px 0; z-index: 1;
+}
+.cover-title .accent { color: var(--c-accent); }
+.cover-subtitle {
+    font-size: 18px; color: var(--c-muted); text-align: center;
+    max-width: 480px; line-height: 1.6; margin-top: 8px; z-index: 1;
+}
+.cover-meta {
+    position: absolute; bottom: 50px; left: 0; right: 0;
+    text-align: center; font-size: 12px; color: var(--c-muted); z-index: 1;
+}
+.cover-meta strong { color: var(--c-accent); }
+
+/* Content */
+.main-content { padding: 50px 55px 30px 55px; }
+
+.chapter-header { break-after: avoid; break-inside: avoid; margin-top: 28px; }
+.chapter-tag {
+    display: inline-block; background: rgba(233,30,99,0.1);
+    color: var(--c-accent); font-size: 11px; font-weight: 700;
+    padding: 4px 12px; border-radius: 50px; margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+.chapter-title {
+    font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700;
+    color: var(--c-text); margin: 0 0 6px 0; line-height: 1.2;
+}
+.divider { width: 40px; height: 3px; background: var(--c-accent); border-radius: 2px; margin-bottom: 16px; }
+
+.body-text { margin-bottom: 12px; }
+.body-text strong { color: var(--c-text); font-weight: 700; }
+
+.sub-title {
+    font-size: 16px; font-weight: 700; color: var(--c-text);
+    margin: 18px 0 8px 0; break-after: avoid;
+}
+.sub-title::before { content: '▸ '; color: var(--c-accent); }
+
+.card {
+    background: var(--c-card); border: 1px solid var(--c-border);
+    border-radius: 12px; padding: 16px 18px; margin-bottom: 12px;
+    break-inside: avoid;
+}
+.card-title { font-weight: 700; font-size: 14px; color: var(--c-accent); margin-bottom: 6px; }
+.card-text { font-size: 13px; color: var(--c-text); line-height: 1.6; }
+
+.tip {
+    background: rgba(233,30,99,0.05); border-left: 3px solid var(--c-accent);
+    border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 12px;
+    break-inside: avoid; font-size: 13px;
+}
+.tip strong { color: var(--c-accent); }
+
+.steps { margin-bottom: 14px; break-inside: avoid; }
+.step {
+    display: flex; gap: 12px; margin-bottom: 10px; break-inside: avoid;
+}
+.step-num {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--c-accent); color: white; font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+}
+.step-content { flex: 1; font-size: 13px; }
+.step-content strong { font-weight: 700; }
+
+.code-inline {
+    background: var(--c-code-bg); padding: 2px 8px; border-radius: 4px;
+    font-family: monospace; font-size: 12px; color: var(--c-accent);
+}
+
+.list-item { display: flex; gap: 8px; margin-bottom: 6px; font-size: 13px; }
+.list-item::before { content: '✓'; color: var(--c-accent); font-weight: 700; flex-shrink: 0; }
+
+.toc-item { display: flex; align-items: baseline; margin-bottom: 8px; font-size: 13px; }
+.toc-num {
+    color: var(--c-accent); font-weight: 700; width: 30px; flex-shrink: 0;
+}
+.toc-text { color: var(--c-text); }
+.toc-dots { flex: 1; border-bottom: 1px dotted var(--c-border); margin: 0 8px; position: relative; top: -3px; }
+
+table { width: 100%; border-collapse: collapse; margin-bottom: 14px; break-inside: avoid; font-size: 12px; }
+th { background: var(--c-accent); color: white; padding: 8px 10px; text-align: left; font-weight: 600; }
+td { padding: 8px 10px; border-bottom: 1px solid var(--c-border); }
+tr:nth-child(even) td { background: rgba(233,30,99,0.02); }
+
+/* Ending */
+.ending {
+    width: 720px; height: 1020px; box-sizing: border-box;
+    break-before: page; overflow: hidden;
+    background: linear-gradient(135deg, #FDF2F8 0%, #FFFBF5 50%, #FFF5E6 100%);
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 70px; position: relative; text-align: center;
+}
+.ending-logo {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--c-accent), var(--c-accent-light));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 900;
+    color: white; margin-bottom: 20px; z-index: 1;
+}
+.ending-title {
+    font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700;
+    color: var(--c-text); margin-bottom: 12px; z-index: 1;
+}
+.ending-text { font-size: 14px; color: var(--c-muted); max-width: 400px; line-height: 1.7; z-index: 1; }
+.ending-accent { color: var(--c-accent); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+    <div class="cover-logo">C</div>
+    <div class="cover-tag">MANUAL DE USUARIO</div>
+    <div class="cover-title">CROCHETERA<span class="accent">.CIX</span></div>
+    <div class="cover-subtitle">Guia completa de configuracion y uso de tu tienda de peluches tejidos a crochet. Aprende a gestionar productos, pedidos, marketing y todos los plugins disponibles.</div>
+    <div class="cover-meta">
+        <strong>https://crochetera-cix.vercel.app</strong><br>
+        Usuario: ashleykoo | Contrasena: carolinechimoy<br>
+        Version 1.0 | Agosto 2026
+    </div>
+</div>
+
+<!-- CONTENT -->
+<div class="main-content">
+
+<!-- INDICE -->
+<div class="chapter-header">
+    <div class="chapter-tag">INDICE</div>
+    <div class="chapter-title">Tabla de Contenido</div>
+    <div class="divider"></div>
+</div>
+<div class="toc-item"><span class="toc-num">01</span><span class="toc-text">Introduccion y Acceso al Panel</span><span class="toc-dots"></span></div>
+<div class="toc-item"><span class="toc-num">02</span><span class="toc-text">Configuracion del Sitio</span><span class="toc-dots"></span></div>
+<div class="toc-item"><span class="toc-num">03</span><span class="toc-text">Gestion de Productos</span><span class="toc-dots"></span></div>
+<div class="toc-item"><span class="toc-num">04</span><span class="toc-text">Categorias y Bundles</span><span class="toc-dots"></span></div>
+<div class="toc-item"><span class="toc-num">05</span><span class="toc-text">Pedidos y Agenda de Produccion</span><span class="toc-dots"></span></div>
+<div class="toc-item"><span class="toc-num">06</span><span class="toc-text">Marketing: Cupones, Puntos, Newsletter, Emails</span><span class="toc-dots"></span></div>
+<div class="toc-item"><span class="toc-num">07</span><span class="toc-text">Contenido: Blog, Stories, Galeria, FAQ, Testimonios</span><span class="toc-dots"></span></div>
+<div class="toc-item"><span class="toc-num">08</span><span class="toc-text">Resenas, Preguntas, Pedidos Personalizados</span><span class="toc-dots"></span></div>
+<div class="toc-item"><span class="toc-num">09</span><span class="toc-text">Analiticas, Costos y Backups</span><span class="toc-dots"></span></div>
+<div class="toc-item"><span class="toc-num">10</span><span class="toc-text">Plugins de la Tienda (60+ herramientas)</span><span class="toc-dots"></span></div>
+<div class="toc-item"><span class="toc-num">11</span><span class="toc-text">Preguntas Frecuentes y Solucion de Problemas</span><span class="toc-dots"></span></div>
+
+<!-- CAPITULO 1: INTRODUCCION -->
+<div class="chapter-header">
+    <div class="chapter-tag">CAPITULO 01</div>
+    <div class="chapter-title">Introduccion y Acceso al Panel</div>
+    <div class="divider"></div>
+</div>
+
+<div class="body-text">
+    <strong>CROCHETERA.CIX</strong> es tu tienda online de peluches tejidos a crochet. Permite mostrar tu catalogo de productos, recibir pedidos, gestionar envios, administrar contenido y mucho mas. Esta guia te explicara paso a paso como configurar y usar todas las herramientas disponibles.
+</div>
+
+<div class="sub-title">Como acceder a tu tienda</div>
+<div class="body-text">
+    Tu tienda esta publicada en internet y accesible desde cualquier dispositivo (celular, tablet o computadora). Solo necesitas abrir el enlace de tu tienda en el navegador.
+</div>
+<div class="tip"><strong>Enlace de tu tienda:</strong> https://crochetera-cix.vercel.app</div>
+
+<div class="sub-title">Como acceder al Panel de Administracion</div>
+<div class="body-text">
+    El Panel de Administracion es donde gestionas todos los aspectos de tu tienda: productos, pedidos, configuracion, marketing y mas. Para acceder necesitas tus credenciales.
+</div>
+
+<div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Abre tu tienda</strong> en el navegador: https://crochetera-cix.vercel.app</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Presiona Ctrl + Shift + A</strong> en tu teclado (o Cmd + Shift + A en Mac). Esto abre el modal de login automaticamente.</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Ingresa tus credenciales:</strong><br>Usuario: <span class="code-inline">ashleykoo</span><br>Contrasena: <span class="code-inline">carolinechimoy</span></div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Haz clic en "Iniciar sesion"</strong>. Seras redirigida al panel de administracion.</div></div>
+</div>
+
+<div class="tip"><strong>Importante:</strong> Tambien puedes hacer clic en el icono de candado que aparece en la esquina inferior derecha de la tienda para abrir el login.</div>
+
+<div class="sub-title">Estructura del Panel de Administracion</div>
+<div class="body-text">
+    El panel tiene <strong>24 secciones</strong> accesibles desde la barra lateral izquierda. Cada seccion gestiona un aspecto diferente de tu tienda. A continuacion veras todas las secciones disponibles:
+</div>
+
+<table>
+<tr><th>Seccion</th><th>Funcion</th></tr>
+<tr><td>Dashboard</td><td>Resumen general con estadisticas</td></tr>
+<tr><td>Analiticas</td><td>Graficos de ventas y productos</td></tr>
+<tr><td>Productos</td><td>Crear, editar y eliminar peluches</td></tr>
+<tr><td>Categorias</td><td>Organizar productos por tipo</td></tr>
+<tr><td>Bundles</td><td>Packs con descuento</td></tr>
+<tr><td>Costos/Margenes</td><td>Calcular ganancia real por producto</td></tr>
+<tr><td>Pedidos</td><td>Ver y gestionar compras</td></tr>
+<tr><td>Agenda</td><td>Calendario de produccion</td></tr>
+<tr><td>Resenas</td><td>Aprobar/comentar reseas</td></tr>
+<tr><td>Preguntas</td><td>Responder dudas de clientes</td></tr>
+<tr><td>Pedidos custom</td><td>Solicitudes personalizadas</td></tr>
+<tr><td>Cupones</td><td>Crear codigos de descuento</td></tr>
+<tr><td>Puntos</td><td>Programa de fidelizacion</td></tr>
+<tr><td>Blog</td><td>Articulos y tips</td></tr>
+<tr><td>Stories</td><td>Fotos efimeras del taller</td></tr>
+<tr><td>Galeria</td><td>Fotos de trabajos</td></tr>
+<tr><td>Testimonios</td><td>Opiniones de clientes</td></tr>
+<tr><td>FAQ</td><td>Preguntas frecuentes</td></tr>
+<tr><td>Newsletter</td><td>Suscriptores por email</td></tr>
+<tr><td>Emails</td><td>Enviar emails automatizados</td></tr>
+<tr><td>Alertas stock</td><td>Clientes esperando reponer</td></tr>
+<tr><td>Backups</td><td>Copias de seguridad</td></tr>
+<tr><td>Secciones</td><td>Mostrar/ocultar secciones</td></tr>
+<tr><td>Configuracion</td><td>Datos del sitio, contacto, colores</td></tr>
+</table>
+
+<div class="tip"><strong>Atajo rapido:</strong> Para volver a la tienda desde el panel, haz clic en "Ver tienda" en la parte inferior de la barra lateral.</div>
+
+<!-- CAPITULO 2: CONFIGURACION -->
+<div class="chapter-header">
+    <div class="chapter-tag">CAPITULO 02</div>
+    <div class="chapter-title">Configuracion del Sitio</div>
+    <div class="divider"></div>
+</div>
+
+<div class="body-text">
+    La seccion <strong>Configuracion</strong> es la primera que debes personalizar. Aqui modificas todos los datos de tu tienda: nombre, eslogan, imagenes, informacion de contacto, redes sociales, metodos de pago y envio, colores del tema y moneda.
+</div>
+
+<div class="sub-title">Identidad de la tienda</div>
+<div class="body-text">
+    En esta seccion configuras el nombre y eslogan que aparecen en el navbar y footer de tu tienda.
+</div>
+<div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content">Ve a <strong>Panel Admin > Configuracion</strong></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">En "Identidad de la tienda", edita:<br>- <strong>Nombre:</strong> CROCHETERA.CIX<br>- <strong>Eslogan:</strong> Peluches tejidos a mano con amor<br>- <strong>Simbolo de moneda:</strong> S/ (soles peruanos)</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content">Puedes subir un <strong>logo</strong> personalizado (opcional)</div></div>
+</div>
+
+<div class="sub-title">Seccion principal (Hero)</div>
+<div class="body-text">
+    El Hero es la primera seccion que ven tus clientes al entrar a la tienda. Incluye un titulo grande, un subtitulo y un boton de accion. Ademas, muestra un carrusel automatico con las imagenes de tus productos.
+</div>
+<div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Titulo:</strong> "Peluches tejidos a mano"</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Subtitulo:</strong> Describe brevemente tu propuesta de valor</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Texto del boton:</strong> "Ver catalogo"</div></div>
+</div>
+<div class="tip"><strong>Carrusel automatico:</strong> El hero rota automaticamente entre las imagenes de tus productos activos cada 3.5 segundos. No necesitas configurar nada, usa las fotos que subas a cada producto.</div>
+
+<div class="sub-title">Seccion "Sobre nosotras"</div>
+<div class="body-text">
+    Esta seccion cuenta tu historia. Incluye un titulo, un texto descriptivo y una imagen. Es importante para conectar emocionalmente con tus clientes y transmitir el valor artesanal de tus peluches.
+</div>
+
+<div class="sub-title">Informacion de contacto</div>
+<div class="body-text">
+    Configura todos tus datos de contacto para que los clientes puedan comunicarse contigo:
+</div>
+<div class="list-item">Telefono: +51 950 886 496</div>
+<div class="list-item">WhatsApp: +51950886496 (sin espacios ni +)</div>
+<div class="list-item">Email: hola@crochetera.cix</div>
+<div class="list-item">Direccion: Lima, Peru</div>
+<div class="list-item">Instagram: URL completa de tu perfil</div>
+<div class="list-item">Facebook: URL completa de tu pagina</div>
+<div class="list-item">TikTok: URL completa de tu perfil</div>
+<div class="tip"><strong>Importante:</strong> El numero de WhatsApp debe ir sin espacios, sin + y sin guiones para que el boton flotante funcione correctamente. Ejemplo: <span class="code-inline">51950886496</span></div>
+
+<div class="sub-title">Envios y Pagos</div>
+<div class="body-text">
+    Configura la informacion que se muestra a los clientes sobre metodos de envio y pago disponibles.
+</div>
+<div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Informacion de envios:</strong> Ej. "Envios a todo el pais. Producto hecho a pedido, demora 5-7 dias habiles."</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Informacion de pagos:</strong> Ej. "Aceptamos transferencia bancaria, Yape, Plin y MercadoPago."</div></div>
+</div>
+
+<div class="sub-title">Colores del tema</div>
+<div class="body-text">
+    Puedes personalizar los colores principales de tu tienda. Los colores predefinidos siguen la paleta artesanal rosa/beige/marron caracteristica de CROCHETERA.CIX.
+</div>
+<div class="list-item">Color primario: Rosa (#E91E63)</div>
+<div class="list-item">Color secundario: Marron (#8D6E63)</div>
+<div class="list-item">Color de acento: Rosa palido (#F8BBD0)</div>
+
+<div class="tip"><strong>Guardar cambios:</strong> Despues de editar cualquier campo, baja al final de la pagina y haz clic en <strong>"Guardar cambios"</strong>. El boton es color rosa y esta fijo en la parte inferior.</div>
+
+<!-- CAPITULO 3: PRODUCTOS -->
+<div class="chapter-header">
+    <div class="chapter-tag">CAPITULO 03</div>
+    <div class="chapter-title">Gestion de Productos</div>
+    <div class="divider"></div>
+</div>
+
+<div class="body-text">
+    La seccion <strong>Productos</strong> es el corazon de tu tienda. Aqui creas, editas y eliminas los peluches que vendes. Cada producto puede tener multiples imagenes, videos, descripcion detallada, precio, descuento, stock y mas.
+</div>
+
+<div class="sub-title">Crear un nuevo producto</div>
+<div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content">Ve a <strong>Panel Admin > Productos</strong></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">Haz clic en <strong>"Nuevo producto"</strong> (boton rosa arriba a la derecha)</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content">Completa el formulario:</div></div>
+</div>
+
+<div class="card">
+    <div class="card-title">Campos del producto</div>
+    <table>
+    <tr><th>Campo</th><th>Descripcion</th></tr>
+    <tr><td>Nombre *</td><td>Nombre del peluche (ej: "Tata BT21 Tejido")</td></tr>
+    <tr><td>Descripcion *</td><td>Texto detallado del producto</td></tr>
+    <tr><td>Precio *</td><td>Precio en soles (ej: 45.00)</td></tr>
+    <tr><td>Precio anterior</td><td>Para mostrar descuento (ej: 60.00)</td></tr>
+    <tr><td>Categoria</td><td>Selecciona una categoria</td></tr>
+    <tr><td>Estado</td><td>Activo (visible), Borrador, Archivado</td></tr>
+    <tr><td>Stock</td><td>Cantidad disponible</td></tr>
+    <tr><td>Stock ilimitado</td><td>Para productos hechos a pedido</td></tr>
+    <tr><td>Destacado</td><td>Aparece en la seccion "Productos destacados"</td></tr>
+    <tr><td>Tamano</td><td>Ej: "Pequeno (12cm)"</td></tr>
+    <tr><td>Altura</td><td>Ej: "12 cm"</td></tr>
+    <tr><td>Material</td><td>Ej: "Hilo acrilico premium, relleno siliconado"</td></tr>
+    <tr><td>Dias elaboracion</td><td>Cuantos dias tardas en hacerlo</td></tr>
+    <tr><td>Tags</td><td>Palabras clave separadas por coma</td></tr>
+    </table>
+</div>
+
+<div class="sub-title">Subir imagenes</div>
+<div class="body-text">
+    Cada producto puede tener multiples imagenes. La primera imagen marcada como "principal" es la que aparece en el carrusel del hero y en las tarjetas del catalogo.
+</div>
+<div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content">En el formulario del producto, baja hasta <strong>"Imagenes del producto"</strong></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Subir archivo:</strong> Haz clic en "Subir archivo" y selecciona imagenes desde tu dispositivo. Se optimizan automaticamente.</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Pegar URL:</strong> Si tienes la imagen en internet, pega la URL directamente.</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Marcar principal:</strong> Haz clic en una imagen y luego en "Hacer principal".</div></div>
+</div>
+<div class="tip"><strong>Formatos soportados:</strong> JPG, PNG, WebP. Las imagenes se redimensionan automaticamente a 1600x1600px maximo y se comprimen a calidad 85% para carga rapida.</div>
+
+<div class="sub-title">Asignar videos</div>
+<div class="body-text">
+    Puedes asignar videos a cualquier producto. Se muestran como un boton de reproduccion sobre la imagen principal.
+</div>
+<div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content">En el formulario, baja hasta <strong>"Videos del producto"</strong></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Subir archivo MP4:</strong> Selecciona videos cortos desde tu dispositivo (maximo 50MB)</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Pegar URL de YouTube/Vimeo:</strong> Pega el enlace del video</div></div>
+</div>
+<div class="tip"><strong>Badge automatico:</strong> Los productos con video muestran un badge "Video" en el catalogo para que los clientes lo vean.</div>
+
+<div class="sub-title">Editar y eliminar productos</div>
+<div class="body-text">
+    Para editar un producto, haz clic en el icono de lapiz que aparece en su tarjeta. Para eliminar, haz clic en el icono de papelera. Siempre te pedira confirmacion antes de eliminar.
+</div>
+
+<div class="tip"><strong>Buscar productos:</strong> Usa la barra de busqueda arriba para encontrar productos por nombre. Tambien puedes filtrar por categoria.</div>
+
+<!-- CAPITULO 4: CATEGORIAS Y BUNDLES -->
+<div class="chapter-header">
+    <div class="chapter-tag">CAPITULO 04</div>
+    <div class="chapter-title">Categorias y Bundles</div>
+    <div class="divider"></div>
+</div>
+
+<div class="sub-title">Crear categorias</div>
+<div class="body-text">
+    Las categorias organizan tus productos. Cada categoria tiene un nombre, un icono emoji, una descripcion y un orden de aparicion.
+</div>
+<div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content">Ve a <strong>Panel Admin > Categorias</strong></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">Haz clic en <strong>"Nueva categoria"</strong></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content">Selecciona un <strong>icono emoji</strong> de la lista (osos, conejos, estrellas, etc.)</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content">Escribe el <strong>nombre</strong> y <strong>descripcion</strong></div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-content">Configura el <strong>orden</strong> (1 aparece primero) y si esta <strong>visible</strong></div></div>
+</div>
+
+<div class="sub-title">Crear bundles (combos)</div>
+<div class="body-text">
+    Los bundles son packs de productos con descuento. Por ejemplo, "Pack BT21 Completo" con 4 peluches a un precio especial.
+</div>
+<div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content">Ve a <strong>Panel Admin > Bundles</strong></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">Haz clic en <strong>"Nuevo bundle"</strong></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content">Completa: nombre, descripcion, <strong>precio del bundle</strong> (con descuento) y <strong>suma original</strong> (precio total sin descuento)</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Agrega productos</strong> al bundle: haz clic en "Agregar producto" y selecciona del catalogo</div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-content">Marca como <strong>"Destacado"</strong> si quieres que aparezca primero</div></div>
+</div>
+<div class="tip"><strong>Calculo automatico:</strong> El sistema calcula automaticamente el porcentaje de descuento y el ahorro para mostrarlo en la tienda.</div>
+
+<!-- CAPITULO 5: PEDIDOS Y AGENDA -->
+<div class="chapter-header">
+    <div class="chapter-tag">CAPITULO 05</div>
+    <div class="chapter-title">Pedidos y Agenda de Produccion</div>
+    <div class="divider"></div>
+</div>
+
+<div class="sub-title">Gestion de pedidos</div>
+<div class="body-text">
+    Cuando un cliente completa una compra, el pedido aparece automaticamente en <strong>Panel Admin > Pedidos</strong>. Cada pedido muestra el nombre del cliente, telefono, productos, total y estado.
+</div>
+<div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content">Ve a <strong>Panel Admin > Pedidos</strong></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">Haz clic en cualquier pedido para ver el detalle completo</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Cambia el estado</strong> del pedido: Pendiente, Confirmado, En produccion, Enviado, Entregado, Cancelado</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Contacta al cliente:</strong> Haz clic en "Contactar por WhatsApp" para abrir una conversacion directa</div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-content"><strong>Exportar CSV:</strong> Descarga todos los pedidos en Excel para llevar control externo</div></div>
+</div>
+
+<div class="sub-title">Estados de los pedidos</div>
+<table>
+<tr><th>Estado</th><th>Significado</th></tr>
+<tr><td>Pendiente</td><td>Recien recibido, esperando confirmacion</td></tr>
+<tr><td>Confirmado</td><td>Confirmado con el cliente, listo para producir</td></tr>
+<tr><td>En produccion</td><td>Estas tejiendo el peluche</td></tr>
+<tr><td>Enviado</td><td>Ya fue enviado al cliente</td></tr>
+<tr><td>Entregado</td><td>El cliente recibio el pedido</td></tr>
+<tr><td>Cancelado</td><td>El pedido fue cancelado</td></tr>
+</table>
+
+<div class="sub-title">Agenda de produccion</div>
+<div class="body-text">
+    La agenda te ayuda a organizar tu calendario de produccion. Puedes crear eventos para cada pedido, asignar fechas de inicio y fin, y cambiar estados.
+</div>
+<div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content">Ve a <strong>Panel Admin > Agenda</strong></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">Haz clic en <strong>"Nuevo evento"</strong></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content">Completa: titulo, descripcion, fecha/hora de inicio y fin, color</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content">Los eventos se agrupan por dia y puedes cambiar su estado (Programado, En progreso, Completado)</div></div>
+</div>
+
+<!-- CAPITULO 6: MARKETING -->
+<div class="chapter-header">
+    <div class="chapter-tag">CAPITULO 06</div>
+    <div class="chapter-title">Marketing: Cupones, Puntos, Newsletter, Emails</div>
+    <div class="divider"></div>
+</div>
+
+<div class="sub-title">Cupones de descuento</div>
+<div class="body-text">
+    Los cupones incentivan compras. Puedes crear codigos de descuento por porcentaje o monto fijo, con limite de usos, fecha de vigencia y compra minima.
+</div>
+<div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content">Ve a <strong>Panel Admin > Cupones</strong></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">Haz clic en <strong>"Nuevo cupon"</strong></div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Tipo:</strong> Porcentaje (10% off) o Monto fijo (S/20 off)</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Configura:</strong> codigo, valor, compra minima, usos maximos, fechas de vigencia</div></div>
+</div>
+<div class="tip"><strong>Cupones ya creados:</strong> BIENVENIDA10 (10% off), PELUCHES15 (15% off +S/100), AMIGURUMI20 (S/20 off +S/80)</div>
+
+<div class="sub-title">Programa de puntos (Fidelizacion)</div>
+<div class="body-text">
+    Los clientes acumulan puntos por sus compras y pueden canjearlos por descuentos. Cada S/1 comprado = 1 punto. Nueva cuenta recibe 50 puntos de bienvenida.
+</div>
+<div class="body-text">
+    En <strong>Panel Admin > Puntos</strong> puedes ver todas las cuentas registradas, puntos acumulados, total ganado y gastado. Tambien puedes exportar la lista en CSV.
+</div>
+
+<div class="sub-title">Newsletter</div>
+<div class="body-text">
+    Los clientes que se suscriben al newsletter desde la tienda aparecen en <strong>Panel Admin > Newsletter</strong>. Puedes exportar la lista en CSV y ver estadisticas.
+</div>
+
+<div class="sub-title">Emails automatizados</div>
+<div class="body-text">
+    En <strong>Panel Admin > Emails</strong> puedes enviar emails manuales o usar plantillas pre-cargadas:
+</div>
+<div class="list-item">Bienvenida (con cupon BIENVENIDA10)</div>
+<div class="list-item">Carrito abandonado (recuperar ventas)</div>
+<div class="list-item">Post-compra (agradecimiento)</div>
+<div class="list-item">Cumpleanos (descuento especial)</div>
+
+<!-- CAPITULO 7: CONTENIDO -->
+<div class="chapter-header">
+    <div class="chapter-tag">CAPITULO 07</div>
+    <div class="chapter-title">Contenido: Blog, Stories, Galeria, FAQ, Testimonios</div>
+    <div class="divider"></div>
+</div>
+
+<div class="sub-title">Blog</div>
+<div class="body-text">
+    El blog te permite escribir articulos sobre cuidados de peluches, tips de crochet, historias del taller, etc. Atrae trafico organico y posiciona tu marca.
+</div>
+<div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content">Ve a <strong>Panel Admin > Blog</strong> y haz clic en <strong>"Nuevo articulo"</strong></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">Completa: titulo, extracto (resumen), contenido, URL de portada, tags</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content">Usa <strong># para titulos</strong> y <strong>- para vietas</strong> en el contenido</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content">Marca como <strong>Publicado</strong> y/o <strong>Destacado</strong></div></div>
+</div>
+
+<div class="sub-title">Stories del taller</div>
+<div class="body-text">
+    Las stories son fotos efimeras (como Instagram Stories) que desaparecen automaticamente. Ideales para mostrar el proceso de creacion, behind the scenes y novedades.
+</div>
+<div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content">Ve a <strong>Panel Admin > Stories</strong> y haz clic en <strong>"Nueva story"</strong></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">Sube una imagen (puedes arrastrar o seleccionar archivo)</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content">Escribe un <strong>titulo</strong> y un <strong>link</strong> (opcional)</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content">Elige la <strong>duracion</strong>: 6h, 12h, 24h, 48h o 3 dias</div></div>
+</div>
+<div class="tip"><strong>Visualizacion:</strong> Las stories aparecen como circulos en la parte superior de la tienda. Al hacer clic se abren en pantalla completa con una barra de progreso de 8 segundos.</div>
+
+<div class="sub-title">Galeria</div>
+<div class="body-text">
+    La galeria muestra fotos de tus trabajos. En <strong>Panel Admin > Galeria</strong> puedes subir imagenes con titulo, descripcion y categoria.
+</div>
+
+<div class="sub-title">FAQ (Preguntas frecuentes)</div>
+<div class="body-text">
+    En <strong>Panel Admin > FAQ</strong> creas preguntas y respuestas que aparecen en la tienda. Las FAQs ya creadas incluyen: tiempo de elaboracion, envios, metodos de pago, personalizacion, cuidados y cancelaciones.
+</div>
+
+<div class="sub-title">Testimonios</div>
+<div class="body-text">
+    En <strong>Panel Admin > Testimonios</strong> puedes agregar opiniones de clientes con nombre, mensaje, calificacion (estrellas) y ubicacion.
+</div>
+
+<!-- CAPITULO 8: RESENAS, PREGUNTAS, CUSTOM -->
+<div class="chapter-header">
+    <div class="chapter-tag">CAPITULO 08</div>
+    <div class="chapter-title">Resenas, Preguntas, Pedidos Personalizados</div>
+    <div class="divider"></div>
+</div>
+
+<div class="sub-title">Resenas de productos</div>
+<div class="body-text">
+    Los clientes pueden escribir resenas en cada producto. Estas resenas llegan a <strong>Panel Admin > Resenas</strong> para que las apruebes antes de publicarlas.
+</div>
+<div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content">Ve a <strong>Panel Admin > Resenas</strong></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">Filtra por <strong>Pendientes</strong> para ver las que faltan aprobar</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content">Haz clic en <strong>"Aprobar"</strong> para publicar o <strong>"Ocultar"</strong> para mantener privada</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content">Puedes <strong>Eliminar</strong> resenas inapropiadas</div></div>
+</div>
+
+<div class="sub-title">Preguntas y respuestas</div>
+<div class="body-text">
+    Los clientes pueden hacer preguntas en cada producto. Estas llegan a <strong>Panel Admin > Preguntas</strong> donde puedes responderlas.
+</div>
+<div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content">Ve a <strong>Panel Admin > Preguntas</strong></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">Las preguntas pendientes aparecen primero</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content">Haz clic en <strong>"Responder"</strong> y escribe tu respuesta</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content">La respuesta se publica automaticamente en el producto</div></div>
+</div>
+
+<div class="sub-title">Pedidos personalizados</div>
+<div class="body-text">
+    Los clientes pueden solicitar peluches personalizados desde la seccion "Personalizados" de la tienda. Estas solicitudes llegan a <strong>Panel Admin > Pedidos custom</strong>.
+</div>
+<div class="steps">
+    <div class="step"><div class="step-num">1</div><div class="step-content">Revisa la solicitud: nombre, email, telefono, descripcion del peluche deseado</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">Cambia el estado: Pendiente, En revision, Cotizado, Aceptado, Rechazado, Completado</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Contacta por WhatsApp</strong> directamente desde el detalle</div></div>
+</div>
+
+<!-- CAPITULO 9: ANALITICAS, COSTOS, BACKUPS -->
+<div class="chapter-header">
+    <div class="chapter-tag">CAPITULO 09</div>
+    <div class="chapter-title">Analiticas, Costos y Backups</div>
+    <div class="divider"></div>
+</div>
+
+<div class="sub-title">Dashboard analitico</div>
+<div class="body-text">
+    En <strong>Panel Admin > Analiticas</strong> encuentras graficos y estadisticas de tu tienda:
+</div>
+<div class="list-item">Ingresos totales y ticket promedio</div>
+<div class="list-item">Grafico de ventas de los ultimos 30 dias</div>
+<div class="list-item">Top 5 productos mas vendidos</div>
+<div class="list-item">Ventas por categoria (grafico de pie)</div>
+<div class="list-item">Estado de pedidos con conteos</div>
+<div class="list-item">Pedidos recientes</div>
+<div class="body-text">
+    Puedes <strong>exportar un reporte completo</strong> en CSV con un clic.
+</div>
+
+<div class="sub-title">Costos y margenes</div>
+<div class="body-text">
+    En <strong>Panel Admin > Costos/Margenes</strong> calculas el costo real de cada producto:
+</div>
+<div class="list-item">Material: costo del hilo, relleno, accesorios</div>
+<div class="list-item">Mano de obra: tu tiempo valorizado</div>
+<div class="list-item">Envio: costo de envio promedio</div>
+<div class="list-item">Otros: empaques, etiquetas, etc.</div>
+<div class="body-text">
+    El sistema calcula automaticamente el <strong>margen de ganancia</strong> y te avisa con un icono de alerta si el margen es menor al 30%.
+</div>
+
+<div class="sub-title">Backups</div>
+<div class="body-text">
+    En <strong>Panel Admin > Backups</strong> puedes crear copias de seguridad de toda tu base de datos. El backup se descarga como archivo JSON con todos los productos, pedidos, clientes y configuracion.
+</div>
+<div class="tip"><strong>Recomendacion:</strong> Crea un backup semanal para mantener tus datos seguros. Especialmente antes de hacer cambios importantes.</div>
+
+<!-- CAPITULO 10: PLUGINS -->
+<div class="chapter-header">
+    <div class="chapter-tag">CAPITULO 10</div>
+    <div class="chapter-title">Plugins de la Tienda (60+ herramientas)</div>
+    <div class="divider"></div>
+</div>
+
+<div class="body-text">
+    Tu tienda incluye mas de <strong>60 plugins</strong> que mejoran la experiencia de compra y aumentan las ventas. Aqui se explica como usar los mas importantes:
+</div>
+
+<div class="card">
+    <div class="card-title">Boton flotante de WhatsApp</div>
+    <div class="card-text">Aparece en la esquina inferior izquierda de todas las paginas. Los clientes hacen clic y se abre WhatsApp con un mensaje pre-escrito pidiendo informacion sobre tus peluches.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Pedir por WhatsApp en productos</div>
+    <div class="card-text">Cada producto tiene un boton "Pedir por WhatsApp" que abre una conversacion con el nombre y precio del peluche ya escritos.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Carrusel del Hero</div>
+    <div class="card-text">La primera seccion rota automaticamente entre las imagenes de tus productos cada 3.5 segundos. Muestra nombre y precio. Haz clic para ir al producto.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Lista de deseos (Wishlist)</div>
+    <div class="card-text">Los clientes marcan peluches con un corazon. El contador aparece en el navbar. Pueden ver su lista en la pagina de Wishlist.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Comparar productos</div>
+    <div class="card-text">Los clientes pueden comparar hasta 3 productos lado a lado en una tabla con precios, tamaños, materiales y disponibilidad.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Vista rapida de producto</div>
+    <div class="card-text">Al pasar el mouse sobre un producto, aparece un boton de ojo. Al hacer clic se abre un modal con info rapida sin salir del catalogo.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Filtros avanzados</div>
+    <div class="card-text">En el catalogo los clientes pueden filtrar por precio, tamano, descuentos y disponibilidad. Tambien cambiar entre vista cuadricula y lista.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Busqueda con autocompletado</div>
+    <div class="card-text">Al escribir en la barra de busqueda del navbar, aparecen resultados instantaneos con imagen, nombre y precio.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Pago con Yape/Plin QR</div>
+    <div class="card-text">En el checkout, los clientes pueden elegir Yape o Plin y se genera un codigo QR con el monto exacto a pagar.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Carrito abandonado</div>
+    <div class="card-text">Si un cliente deja productos sin comprar, aparece un popup ofreciendo completar la compra o contactar por WhatsApp.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Notificaciones de prueba social</div>
+    <div class="card-text">Popup que aparece periodicamente mostrando "Maria de Lima compro Osito de Amor Rosado hace 5 min". Genera confianza.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Cupones en checkout</div>
+    <div class="card-text">Los clientes pueden ingresar codigos de descuento (ej: BIENVENIDA10) en el checkout para recibir 10% off.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Programa de puntos</div>
+    <div class="card-text">Widget en el checkout donde los clientes consultan sus puntos por email y los canjean por descuento.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Confeti al comprar</div>
+    <div class="card-text">Al completar una compra, aparece una animacion de confeti celebrando la compra.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Modo oscuro</div>
+    <div class="card-text">Boton de sol/luna en el navbar para cambiar entre modo claro y oscuro. Se guarda la preferencia.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Multi-idioma (Espanol/Ingles)</div>
+    <div class="card-text">Selector de idioma en el navbar. Cambia los textos principales de la tienda entre espanol e ingles.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Tema por temporada</div>
+    <div class="card-text">Cambia el fondo y colores de la tienda segun la temporada: Navidad, San Valentin, Dia de la Madre, Verano, Halloween.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Musica ambiental</div>
+    <div class="card-text">Boton en la esquina inferior derecha para activar/desactivar musica suave generada con notas de piano.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Cursor personalizado</div>
+    <div class="card-text">Cursor con un circulo y punto que siguen el mouse, con animacion al hacer clic.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Codigos QR de productos</div>
+    <div class="card-text">Cada producto tiene un boton "Codigo QR" que genera un QR descargable. Ideal para catalogos fisicos o empaques.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Compartir en redes</div>
+    <div class="card-text">Cada producto tiene botones para compartir en WhatsApp, Facebook, Twitter/X y TikTok.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Guia de tallas</div>
+    <div class="card-text">Modal con 4 tamanos (Pequeno, Mediano, Grande, Extra Grande) y sus medidas, peso, uso y precio.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Banner de cookies</div>
+    <div class="card-text">Aparece en la primera visita para solicitar consentimiento de cookies.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Boton volver arriba</div>
+    <div class="card-text">Aparece al hacer scroll hacia abajo. Un clic lleva al inicio de la pagina.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Linktree (Links)</div>
+    <div class="card-text">Pagina con todos tus enlaces (WhatsApp, Instagram, Facebook, email, catalogo) en un solo lugar. Ideal para tu bio de Instagram.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Seguimiento de pedidos</div>
+    <div class="card-text">Los clientes pueden rastrear su pedido ingresando el numero y telefono. Muestra el estado con una linea de tiempo visual.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Notificacion de stock</div>
+    <div class="card-text">En productos agotados, los clientes pueden dejar su email para ser notificados cuando haya stock.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Feed de Instagram</div>
+    <div class="card-text">Seccion en la home que muestra tus ultimas fotos y un boton para seguir tu cuenta.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">PWA (App instalable)</div>
+    <div class="card-text">La tienda se puede instalar como aplicacion en el celular o computadora para acceso rapido.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Captcha anti-spam</div>
+    <div class="card-text">Proteccion contra bots en formularios con captcha matematico y honeypot.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Rate limiting</div>
+    <div class="card-text">Protege el login admin limitando a 10 intentos por IP cada 15 minutos.</div>
+</div>
+
+<!-- CAPITULO 11: FAQ -->
+<div class="chapter-header">
+    <div class="chapter-tag">CAPITULO 11</div>
+    <div class="chapter-title">Preguntas Frecuentes y Solucion de Problemas</div>
+    <div class="divider"></div>
+</div>
+
+<div class="card">
+    <div class="card-title">No puedo acceder al panel admin</div>
+    <div class="card-text">Verifica que usas las credenciales correctas: usuario <strong>ashleykoo</strong> y contrasena <strong>carolinechimoy</strong>. Si fallaste 10 veces, espera 15 minutos (rate limiting activo). Usa el atajo Ctrl+Shift+A para abrir el login.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Las imagenes no se ven en la tienda</div>
+    <div class="card-text">Si subiste imagenes desde el admin, verifica que esten marcadas como "Principal". Si pegaste URLs, asegurate de que sean accesibles publicamente. Las imagenes se optimizan automaticamente al subirlas.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">El boton de WhatsApp no funciona</div>
+    <div class="card-text">Verifica en Configuracion que el numero de WhatsApp este sin espacios, sin + y sin guiones. Ejemplo correcto: <strong>51950886496</strong>. Ejemplo incorrecto: +51 950 886 496.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">El carrusel del hero no cambia</div>
+    <div class="card-text">El carrusel rota entre los productos que tienen al menos una imagen y estado "Activo". Si todos tus productos estan en "Borrador" o no tienen imagenes, el carrusel no tendra nada que mostrar.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Como cambio el numero de telefono</div>
+    <div class="card-text">Ve a Panel Admin > Configuracion > "Informacion de contacto". Cambia los campos "Telefono" y "WhatsApp". Guarda los cambios al final de la pagina.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Como agrego un video a un producto</div>
+    <div class="card-text">Edita el producto, baja hasta "Videos del producto", haz clic en "Subir archivo" (para MP4) o "Pegar URL" (para YouTube). Guarda los cambios.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Como creo un cupon de descuento</div>
+    <div class="card-text">Panel Admin > Cupones > "Nuevo cupon". Elige tipo (porcentaje o monto fijo), valor, codigo, y opcionalmente compra minima, usos maximos y fechas de vigencia.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Como veo mis estadisticas</div>
+    <div class="card-text">Panel Admin > Analiticas. Veras ingresos totales, grafico de ventas, productos mas vendidos, ventas por categoria y estado de pedidos.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">Como hago un backup</div>
+    <div class="card-text">Panel Admin > Backups > "Crear backup". Se descargara un archivo JSON con todos tus datos. Hazlo semanalmente.</div>
+</div>
+
+<div class="card">
+    <div class="card-title">La tienda no se actualiza despues de cambios</div>
+    <div class="card-text">Recarga la pagina con Ctrl+Shift+R (o Cmd+Shift+R en Mac) para forzar la descarga sin cache. Si el problema persiste, abre en una pestana de incognito.</div>
+</div>
+
+<div class="tip"><strong>Soporte:</strong> Si tienes problemas que no puedes resolver, contacta al desarrollador. Tu tienda esta desplegada en Vercel y el codigo esta en GitHub (marcoskoo/crochetera-cix).</div>
+
+</div>
+
+<!-- ENDING -->
+<div class="ending">
+    <div class="ending-logo">C</div>
+    <div class="ending-title">CROCHETERA<span class="ending-accent">.CIX</span></div>
+    <div class="ending-text">
+        Manual de Configuracion y Uso<br><br>
+        Tu tienda de peluches tejidos a crochet esta lista para vender.<br>
+        Gestiona productos, recibe pedidos y conecta con tus clientes.<br><br>
+        <strong>https://crochetera-cix.vercel.app</strong><br><br>
+        Hecho con amor y mucho hilo.
+    </div>
+</div>
+
+</body>
+</html>
