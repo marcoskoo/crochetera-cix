@@ -1,36 +1,60 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { isAuthenticated } from '@/lib/auth'
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
-import { createReadStream, statSync } from 'fs'
-import { randomUUID } from 'crypto'
 
-// POST /api/backups/create - crear backup de la DB
+// POST /api/backups/create - exportar DB como JSON (serverless-compatible)
 export async function POST() {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
   }
   try {
-    const backupDir = path.join(process.cwd(), 'backups')
-    await mkdir(backupDir, { recursive: true })
+    // En serverless no podemos copiar el archivo SQLite
+    // En su lugar, exportamos los datos como JSON
+    const [
+      siteConfig, products, categories, orders, coupons, blogPosts,
+      testimonials, faqs, stories, bundles, galleryImages, customRequests,
+      newsletterSubscribers, loyaltyAccounts,
+    ] = await Promise.all([
+      db.siteConfig.findFirst(),
+      db.product.findMany({ include: { images: true, videos: true } }),
+      db.category.findMany(),
+      db.order.findMany({ include: { items: true } }),
+      db.coupon.findMany(),
+      db.blogPost.findMany(),
+      db.testimonial.findMany(),
+      db.fAQ.findMany(),
+      db.story.findMany(),
+      db.bundle.findMany({ include: { items: true } }),
+      db.galleryImage.findMany(),
+      db.customRequest.findMany(),
+      db.newsletterSubscriber.findMany(),
+      db.loyaltyAccount.findMany(),
+    ])
 
-    const filename = `backup-${new Date().toISOString().replace(/[:.]/g, '-')}.db`
-    const backupPath = path.join(backupDir, filename)
+    const backup = {
+      exportedAt: new Date().toISOString(),
+      version: '1.0',
+      data: {
+        siteConfig, products, categories, orders, coupons, blogPosts,
+        testimonials, faqs, stories, bundles, galleryImages, customRequests,
+        newsletterSubscribers, loyaltyAccounts,
+      },
+    }
 
-    // Copiar la DB SQLite
-    const dbPath = path.join(process.cwd(), 'db', 'custom.db')
-    const { copyFile } = await import('fs/promises')
-    await copyFile(dbPath, backupPath)
-
-    const stats = statSync(backupPath)
-    const size = stats.size
+    const filename = `backup-${new Date().toISOString().replace(/[:.]/g, '-')}.json`
+    const size = JSON.stringify(backup).length
 
     await db.backupLog.create({
       data: { filename, size, type: 'manual', status: 'success' },
     })
 
-    return NextResponse.json({ ok: true, filename, size })
+    // Devolver como archivo descargable
+    return new NextResponse(JSON.stringify(backup, null, 2), {
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Disposition': `attachment; filename="${filename}"`,
+      },
+    })
   } catch (e) {
     await db.backupLog.create({
       data: {
