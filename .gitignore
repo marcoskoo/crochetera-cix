@@ -32,8 +32,8 @@ server.log
 .idea/
 
 # Sandbox
-upload/
-agent-ctx/
-skills/
-tests/
-.zscripts/
+/upload/
+/agent-ctx/
+/skills/
+/tests/
+/.zscripts/
