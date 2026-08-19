@@ -27,9 +27,17 @@ export function LinktreePage() {
       >
         {/* Avatar */}
         <div className="text-center mb-8">
-          <div className="w-28 h-28 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-display font-bold text-5xl shadow-xl mx-auto mb-4 yarn-float">
-            C
-          </div>
+          {siteConfig?.logoUrl ? (
+            <img
+              src={siteConfig.logoUrl}
+              alt="CROCHETERA.CIX"
+              className="w-28 h-28 rounded-full object-cover shadow-xl mx-auto mb-4 yarn-float"
+            />
+          ) : (
+            <div className="w-28 h-28 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-display font-bold text-5xl shadow-xl mx-auto mb-4 yarn-float">
+              C
+            </div>
+          )}
           <h1 className="font-display text-3xl font-bold">
             CROCHETERA<span className="text-primary">.CIX</span>
           </h1>

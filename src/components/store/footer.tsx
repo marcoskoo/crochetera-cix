@@ -15,9 +15,17 @@ export function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-display font-bold text-lg">
-                C
-              </div>
+              {siteConfig?.logoUrl ? (
+                <img
+                  src={siteConfig.logoUrl}
+                  alt="CROCHETERA.CIX"
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-display font-bold text-lg">
+                  C
+                </div>
+              )}
               <h3 className="font-display text-xl font-bold">
                 CROCHETERA<span className="text-primary">.CIX</span>
               </h3>

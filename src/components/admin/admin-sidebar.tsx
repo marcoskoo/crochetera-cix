@@ -70,14 +70,23 @@ interface AdminSidebarProps {
 export function AdminSidebar({ onNavigate }: AdminSidebarProps) {
   const adminSection = useStore((s) => s.adminSection)
   const setAdminSection = useStore((s) => s.setAdminSection)
+  const siteConfig = useStore((s) => s.siteConfig)
 
   return (
     <div className="flex flex-col h-full">
       <div className="p-6 border-b border-sidebar-border">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-display font-bold text-lg">
-            C
-          </div>
+          {siteConfig?.logoUrl ? (
+            <img
+              src={siteConfig.logoUrl}
+              alt="CROCHETERA.CIX"
+              className="w-10 h-10 rounded-full object-cover"
+            />
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-display font-bold text-lg">
+              C
+            </div>
+          )}
           <div>
             <p className="font-display font-bold text-lg leading-none">
               CROCHETERA<span className="text-primary">.CIX</span>

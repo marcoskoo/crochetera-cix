@@ -80,9 +80,17 @@ export function Navbar() {
               onClick={() => goToSection('home')}
               className="flex items-center gap-2 group"
             >
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-display font-bold text-lg shadow-md group-hover:scale-110 transition-transform">
-                C
-              </div>
+              {siteConfig?.logoUrl ? (
+                <img
+                  src={siteConfig.logoUrl}
+                  alt="CROCHETERA.CIX"
+                  className="w-12 h-12 rounded-full object-cover shadow-md group-hover:scale-110 transition-transform"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-display font-bold text-lg shadow-md group-hover:scale-110 transition-transform">
+                  C
+                </div>
+              )}
               <div className="text-left">
                 <h1 className="font-display font-bold text-lg md:text-xl tracking-tight leading-none">
                   CROCHETERA<span className="text-primary">.CIX</span>
