@@ -78,24 +78,24 @@ export function Navbar() {
             {/* Logo */}
             <button
               onClick={() => goToSection('home')}
-              className="flex items-center gap-2 group"
+              className="flex items-center gap-2 group flex-shrink-0"
             >
               {siteConfig?.logoUrl ? (
                 <img
                   src={siteConfig.logoUrl}
                   alt="CROCHETERA.CIX"
-                  className="w-12 h-12 rounded-full object-cover shadow-md group-hover:scale-110 transition-transform"
+                  className="w-9 h-9 md:w-12 md:h-12 rounded-full object-cover shadow-md group-hover:scale-110 transition-transform"
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-display font-bold text-lg shadow-md group-hover:scale-110 transition-transform">
+                <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-display font-bold text-base md:text-lg shadow-md group-hover:scale-110 transition-transform">
                   C
                 </div>
               )}
-              <div className="text-left">
-                <h1 className="font-display font-bold text-lg md:text-xl tracking-tight leading-none">
+              <div className="text-left hidden sm:block">
+                <h1 className="font-display font-bold text-base md:text-xl tracking-tight leading-none">
                   CROCHETERA<span className="text-primary">.CIX</span>
                 </h1>
-                <p className="text-[10px] md:text-xs text-muted-foreground hidden sm:block">
+                <p className="text-[9px] md:text-xs text-muted-foreground hidden md:block">
                   {siteConfig?.tagline || 'Peluches tejidos a mano'}
                 </p>
               </div>
@@ -117,22 +117,24 @@ export function Navbar() {
             </nav>
 
             {/* Actions */}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-0.5 md:gap-1">
+              {/* Search icon - hidden on mobile (available in menu) */}
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setSearchOpen(!searchOpen)}
-                className="h-10 w-10"
+                className="h-9 w-9 md:h-10 md:w-10 hidden md:flex"
                 aria-label="Buscar"
               >
                 <Search className="h-5 w-5" />
               </Button>
 
+              {/* Wishlist - hidden on very small screens */}
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => goToSection('wishlist')}
-                className="relative h-10 w-10"
+                className="relative h-9 w-9 md:h-10 md:w-10 hidden sm:flex"
                 aria-label="Lista de deseos"
                 title="Lista de deseos"
               >
@@ -144,11 +146,12 @@ export function Navbar() {
                 )}
               </Button>
 
+              {/* Cart */}
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setCartOpen(true)}
-                className="relative h-10 w-10"
+                className="relative h-9 w-9 md:h-10 md:w-10"
                 aria-label="Carrito"
               >
                 <ShoppingCart className="h-5 w-5" />
@@ -159,9 +162,10 @@ export function Navbar() {
                 )}
               </Button>
 
-              <div className="hidden md:block">
-                <ThemeToggle />
-              </div>
+              {/* Theme toggle - always visible */}
+              <ThemeToggle />
+
+              {/* Language switcher - desktop only */}
               <div className="hidden md:block">
                 <LanguageSwitcher />
               </div>
@@ -218,6 +222,12 @@ export function Navbar() {
                         Panel Admin
                       </Button>
                     )}
+                    <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
+                      <div className="flex items-center gap-2">
+                        <ThemeToggle />
+                        <LanguageSwitcher />
+                      </div>
+                    </div>
                   </nav>
                 </SheetContent>
               </Sheet>

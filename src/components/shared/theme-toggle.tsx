@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button'
 type Theme = 'light' | 'dark'
 
 export function ThemeToggle() {
-  // Initialize from localStorage if available (client-side)
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window === 'undefined') return 'light'
     const stored = localStorage.getItem('crochetera-theme') as Theme | null
@@ -31,7 +30,7 @@ export function ThemeToggle() {
       variant="ghost"
       size="icon"
       onClick={toggle}
-      className="h-10 w-10"
+      className="h-10 w-10 flex-shrink-0 rounded-full hover:bg-accent/30 transition-colors"
       aria-label={theme === 'light' ? 'Activar modo oscuro' : 'Activar modo claro'}
       title={theme === 'light' ? 'Modo oscuro' : 'Modo claro'}
     >
