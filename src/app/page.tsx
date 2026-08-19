@@ -19,7 +19,6 @@ export default function Home() {
     setMounted(true)
   }, [])
 
-  // Evitar hydration mismatch
   if (!mounted) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -28,12 +27,10 @@ export default function Home() {
     )
   }
 
-  // Si está authed y en vista admin, mostrar panel
   if (view === 'admin' && adminAuthed) {
     return <AdminPanel />
   }
 
-  // Si pidió admin pero no está authed, mostrar login
   if (view === 'admin' && !adminAuthed) {
     return (
       <>
@@ -52,7 +49,6 @@ export default function Home() {
   )
 }
 
-// Botón flotante discreto para acceder al panel admin
 function FloatingAdminButton({ onClick }: { onClick: () => void }) {
   const adminAuthed = useStore((s) => s.adminAuthed)
   const setView = useStore((s) => s.setView)
@@ -82,4 +78,3 @@ function FloatingAdminButton({ onClick }: { onClick: () => void }) {
     </Button>
   )
 }
-
