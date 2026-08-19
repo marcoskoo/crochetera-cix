@@ -87,9 +87,11 @@ export function AdminPanel() {
   return (
     <div className="min-h-screen flex bg-muted/20">
       {/* Sidebar desktop */}
-      <aside className="hidden md:flex flex-col w-64 bg-sidebar border-r border-sidebar-border">
-        <AdminSidebar />
-        <div className="p-4 border-t border-sidebar-border space-y-2">
+      <aside className="hidden md:flex flex-col w-64 bg-sidebar border-r border-sidebar-border h-screen sticky top-0 overflow-hidden">
+        <div className="flex-1 overflow-hidden flex flex-col">
+          <AdminSidebar />
+        </div>
+        <div className="p-3 border-t border-sidebar-border space-y-1 flex-shrink-0">
           <Button
             variant="ghost"
             size="sm"
@@ -120,10 +122,12 @@ export function AdminPanel() {
             <Menu className="h-5 w-5" />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-64 p-0">
+        <SheetContent side="left" className="w-64 p-0 flex flex-col">
           <SheetTitle className="sr-only">Menú admin</SheetTitle>
-          <AdminSidebar onNavigate={() => setMobileOpen(false)} />
-          <div className="p-4 border-t border-sidebar-border space-y-2">
+          <div className="flex-1 overflow-hidden flex flex-col">
+            <AdminSidebar onNavigate={() => setMobileOpen(false)} />
+          </div>
+          <div className="p-3 border-t border-sidebar-border space-y-1 flex-shrink-0">
             <Button
               variant="ghost"
               size="sm"
