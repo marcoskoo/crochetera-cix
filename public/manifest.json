@@ -1,0 +1,21 @@
+{
+  "name": "CROCHETERA.CIX — Peluches tejidos a mano",
+  "short_name": "CROCHETERA",
+  "description": "Tienda de peluches tejidos a crochet hechos a mano con amor",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf6f0",
+  "theme_color": "#E91E63",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/uploads/hero-bt21-tata.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "lifestyle"],
+  "lang": "es",
+  "dir": "ltr"
+}
