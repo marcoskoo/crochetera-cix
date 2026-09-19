@@ -31,7 +31,6 @@ import { BlogPostView } from './blog-post-view'
 import { LinktreePage } from './linktree-page'
 import { AbandonedCartRecovery } from './abandoned-cart-recovery'
 import { AdminLoginModal } from '@/components/admin/admin-login-modal'
-import { AmbientMusic } from '@/components/shared/ambient-music'
 import { CustomCursor } from '@/components/shared/custom-cursor'
 import { SeasonalTheme } from '@/components/shared/seasonal-theme'
 import { useEffect, useState } from 'react'
@@ -98,7 +97,6 @@ export function Storefront() {
       <WhatsAppFloating />
       <CookieConsent />
       <AbandonedCartRecovery />
-      <AmbientMusic />
       <SeasonalTheme />
       <CustomCursor />
       <AdminLoginModal />
